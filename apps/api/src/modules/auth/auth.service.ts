@@ -6,6 +6,8 @@ import {
   AuthSignUpByGoogleTokenResponse,
   AuthSignUpByCredentialsPayload,
   AuthSignUpByCredentialsResponse,
+  AuthCreatePasswordPayload,
+  AuthCreatePasswordResponse,
   AuthProfileResponse,
   JWTAccessToken,
   JWTRefreshToken,
@@ -15,6 +17,7 @@ import {
 import { ConfigService } from '@demo-A/nest-modules';
 import { OAuth2Client } from 'google-auth-library';
 import { ClsService } from 'nestjs-cls';
+import * as bcrypt from 'bcrypt';
 
 import { Config } from '../../config/config.types';
 import {
@@ -26,6 +29,7 @@ import { JWTUserTokenData } from './auth.types';
 @Injectable()
 export class AuthService {
   private oAuth2Client: OAuth2Client;
+  private passwordHashSaltRound = 10;
 
   constructor(
     private configService: ConfigService<Config>,
@@ -107,10 +111,40 @@ export class AuthService {
   async signUpByCredentials(
     payload: AuthSignUpByCredentialsPayload,
   ): Promise<AuthSignUpByCredentialsResponse> {
+    const user = await this.usersRepository.getUserBy({
+      email: payload.username,
+    });
+    if (!user || !user.password) {
+      throw new Error('User not found or password incorrect');
+    }
+    if (!(await bcrypt.compare(user.password, payload.password))) {
+      throw new Error('User not found or password incorrect');
+    }
+
+    const tokens = await this.generateAuthTokens({ userId: user.id });
     return {
-      accessToken: '' as JWTAccessToken,
-      refreshToken: '' as JWTRefreshToken,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
     };
+  }
+
+  async createPassword(
+    payload: AuthCreatePasswordPayload,
+  ): Promise<AuthCreatePasswordResponse> {
+    const _user = this.cls.get('user');
+    if (!_user) throw new Error('User not found');
+    const user = await this.usersRepository.getUserById(_user.id);
+    if (!user) throw new Error('User not found');
+    if (user.password) throw new Error('Password already exist');
+
+    const hashedPassword = await bcrypt.hash(
+      payload.password,
+      this.passwordHashSaltRound,
+    );
+    await this.usersRepository.updateUserByUserId(user.id, {
+      password: hashedPassword,
+    });
+    return { success: true };
   }
 
   async generateAuthTokens(

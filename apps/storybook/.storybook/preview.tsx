@@ -1,8 +1,11 @@
 import { Preview } from '@storybook/react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { withThemeFromJSXProvider } from '@storybook/addon-themes';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { darkTheme, lightTheme } from '@demo-A/app-design-system';
 import './reset.css';
+
+const queryClient = new QueryClient();
 
 export const decorators = [
   withThemeFromJSXProvider({
@@ -14,6 +17,9 @@ export const decorators = [
     Provider: ThemeProvider,
     GlobalStyles: CssBaseline,
   }),
+  (story: any) => (
+    <QueryClientProvider client={queryClient}>{story()}</QueryClientProvider>
+  ),
 ];
 
 const preview: Preview = {

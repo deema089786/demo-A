@@ -1,15 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  UserEntity,
-  UserProfileEntity,
-  User,
-} from '@demo-A/api-types';
+import { UserEntity, UserProfileEntity, User } from '@demo-A/api-types';
 import { Repository } from 'typeorm';
 import { FindOneOptions } from 'typeorm/find-options/FindOneOptions';
 
 import {
   UsersRepositoryCreateUserPayload,
+  UsersRepositoryUpdateUserPayload,
   UsersRepositoryUpdateUserProfilePayload,
 } from './users.repository.types';
 
@@ -61,6 +58,15 @@ export class UsersRepository {
 
     user.profile = userProfile;
     return user;
+  }
+
+  async updateUserByUserId(
+    userId: string,
+    payload: UsersRepositoryUpdateUserPayload,
+  ): Promise<void> {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) throw new Error('User not found');
+    await this.usersRepository.update({ id: user.id }, payload);
   }
 
   async updateUserProfileByUserId(

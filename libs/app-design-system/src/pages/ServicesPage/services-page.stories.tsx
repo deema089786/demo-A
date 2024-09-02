@@ -1,9 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Service } from '@demo-A/app-modules';
+import { withRouter } from 'storybook-addon-remix-react-router';
 
 import { ServicesPage } from './services-page.component';
 
 const meta: Meta<typeof ServicesPage> = {
+  decorators: [withRouter],
   component: ServicesPage,
   title: 'Pages/Services Page',
   parameters: {

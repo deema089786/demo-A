@@ -10,7 +10,11 @@ const config: StorybookConfig = {
     '../../../libs/app-design-system/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
     '../../../libs/app-design-system/src/**/*.docs.mdx',
   ],
-  addons: ['@storybook/addon-essentials', '@storybook/addon-themes'],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-themes',
+    'storybook-addon-remix-react-router',
+  ],
   staticDirs: ['../static'],
   core: {
     builder: '@storybook/builder-vite',
@@ -25,25 +29,20 @@ const config: StorybookConfig = {
   features: {
     experimentalRSC: true,
   },
-  // typescript: {
-  //   reactDocgen: 'react-docgen-typescript',
-  //   reactDocgenTypescriptOptions: {
-  //     // Speeds up Storybook build time
-  //     compilerOptions: {
-  //       allowSyntheticDefaultImports: false,
-  //       esModuleInterop: false,
-  //     },
-  //     // Makes union prop types like variant and size appear as select controls
-  //     shouldExtractLiteralValuesFromEnum: true,
-  //     // Makes string and boolean types that can be undefined appear as inputs and switches
-  //     shouldRemoveUndefinedFromOptional: true,
-  //     // Filter out third-party props from node_modules except @mui packages
-  //     propFilter: (prop) =>
-  //       prop.parent
-  //         ? !/node_modules\/(?!@mui)/.test(prop.parent.fileName)
-  //         : true,
-  //   },
-  // },
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
+    reactDocgenTypescriptOptions: {
+      // Speeds up Storybook build time
+      compilerOptions: {
+        allowSyntheticDefaultImports: false,
+        esModuleInterop: false,
+      },
+      // Makes union prop types like variant and size appear as select controls
+      shouldExtractLiteralValuesFromEnum: true,
+      // Makes string and boolean types that can be undefined appear as inputs and switches
+      shouldRemoveUndefinedFromOptional: true,
+    },
+  },
 };
 
 export default config;

@@ -14,6 +14,9 @@ import {
   AuthSignUpByCredentialsPayload,
   AuthSignUpByCredentialsResponse,
   authSignUpByCredentialsPayloadSchema,
+  AuthCreatePasswordPayload,
+  AuthCreatePasswordResponse,
+  authCreatePasswordPayloadSchema,
   AuthProfileResponse,
   updateProfilePayloadSchema,
   UpdateProfilePayload,
@@ -42,6 +45,14 @@ export class AuthController {
     @Body() payload: AuthSignUpByCredentialsPayload,
   ): Promise<AuthSignUpByCredentialsResponse> {
     return this.authService.signUpByCredentials(payload);
+  }
+
+  @Post('/create-password')
+  @UsePipes(new ZodValidationPipe(authCreatePasswordPayloadSchema))
+  createPassword(
+    @Body() payload: AuthCreatePasswordPayload,
+  ): Promise<AuthCreatePasswordResponse> {
+    return this.authService.createPassword(payload);
   }
 
   @Get('/profile')

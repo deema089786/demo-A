@@ -6,6 +6,7 @@ export interface User extends Timestamp {
 
   phoneNumber: string | null;
   email: string | null;
+  password: string | null;
 
   profile: UserProfile | null;
 }

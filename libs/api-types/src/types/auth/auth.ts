@@ -34,6 +34,18 @@ export type AuthSignUpByCredentialsResponse = {
 };
 // endregion
 
+// region Sign Up by Credentials
+export const authCreatePasswordPayloadSchema = z.object({
+  password: z.string(),
+});
+export type AuthCreatePasswordPayload = z.infer<
+  typeof authSignUpByCredentialsPayloadSchema
+>;
+export type AuthCreatePasswordResponse = {
+  success: boolean;
+};
+// endregion
+
 // region User's Profile
 export interface AuthProfileResponse {
   id: string;

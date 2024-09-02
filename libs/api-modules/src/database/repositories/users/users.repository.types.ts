@@ -12,3 +12,7 @@ export interface UsersRepositoryUpdateUserProfilePayload {
   lastName?: string | null;
   image?: string | null;
 }
+
+export interface UsersRepositoryUpdateUserPayload {
+  password: string | null;
+}

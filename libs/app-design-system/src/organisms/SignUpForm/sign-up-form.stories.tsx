@@ -12,3 +12,7 @@ type Story = StoryObj<typeof SignUpForm>;
 export const Default: Story = {
   args: {},
 };
+
+export const WithGoogleButton: Story = {
+  args: { googleClientId: 'test' },
+};
