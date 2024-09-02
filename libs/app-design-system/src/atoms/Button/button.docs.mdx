@@ -1,0 +1,33 @@
+import { Source, Meta, Story } from '@storybook/blocks';
+import * as ButtonStories from './button.stories';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+<div style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <Story of={ButtonStories.PrimarySmall} />
+    <Story of={ButtonStories.PrimaryMedium} />
+    <Story of={ButtonStories.PrimaryLarge} />
+    <Story of={ButtonStories.SecondarySmall} />
+    <Story of={ButtonStories.SecondaryMedium} />
+    <Story of={ButtonStories.SecondaryLarge} />
+  </div>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <Story of={ButtonStories.PrimaryOutlinedSmall} />
+    <Story of={ButtonStories.PrimaryOutlinedMedium} />
+    <Story of={ButtonStories.PrimaryOutlinedLarge} />
+    <Story of={ButtonStories.SecondaryOutlinedSmall} />
+    <Story of={ButtonStories.SecondaryOutlinedMedium} />
+    <Story of={ButtonStories.SecondaryOutlinedLarge} />
+  </div>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <Story of={ButtonStories.PrimaryContainedSmall} />
+    <Story of={ButtonStories.PrimaryContainedMedium} />
+    <Story of={ButtonStories.PrimaryContainedLarge} />
+    <Story of={ButtonStories.SecondaryContainedSmall} />
+    <Story of={ButtonStories.SecondaryContainedMedium} />
+    <Story of={ButtonStories.SecondaryContainedLarge} />
+  </div>
+</div>

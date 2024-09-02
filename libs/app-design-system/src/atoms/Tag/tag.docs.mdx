@@ -1,0 +1,21 @@
+import { Source, Meta, Story } from '@storybook/blocks';
+import * as TagStories from './tag.stories';
+
+<Meta of={TagStories} />
+
+# Tag Variants
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+    alignItems: 'start',
+  }}
+>
+  <Story of={TagStories.Primary} />
+  <Story of={TagStories.Secondary} />
+  <Story of={TagStories.Info} />
+  <Story of={TagStories.Success} />
+  <Story of={TagStories.Warning} />
+</div>

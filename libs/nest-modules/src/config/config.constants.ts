@@ -1,0 +1,1 @@
+export const MODULE_CONFIG = 'MODULE_CONFIG';

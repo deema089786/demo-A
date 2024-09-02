@@ -1,0 +1,39 @@
+{
+  "extends": [
+    "plugin:prettier/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "plugin:react-hooks/recommended"
+  ],
+  "plugins": ["import", "react-hooks"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "jsx-quotes": ["error", "prefer-double"],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+
+
+        "import/no-unresolved": ["off"],
+        "import/order": [
+          "error",
+          {
+            "newlines-between": "always",
+            "groups": [["external", "builtin"], "internal", ["parent", "sibling", "index"], ["object", "unknown"]]
+          }
+        ],
+        "import/extensions": [
+          "error",
+          "ignorePackages",
+          { "ts": "never", "tsx": "never", "js": "never", "jsx": "never", "json": "always" }
+        ],
+        "import/prefer-default-export": ["off"],
+        "import/no-extraneous-dependencies": [0],
+
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error"
+      }
+    }
+  ]
+}

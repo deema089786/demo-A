@@ -1,0 +1,9 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as PaperStories from './paper.stories';
+
+<Meta of={PaperStories} />
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+  <Story of={PaperStories.Default} />
+  <Story of={PaperStories.Square} />
+</div>

@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "strict": true,
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@demo-A/api-modules": ["libs/api-modules/src/index.ts"],
+      "@demo-A/api-types": ["libs/api-types/src/index.ts"],
+      "@demo-A/app-design-system": ["libs/app-design-system/src/index.ts"],
+      "@demo-A/nest-modules": ["libs/nest-modules/src/index.ts"],
+      "@demo-A/nest-utils": ["libs/nest-utils/src/index.ts"],
+      "@demo-A/app-modules": ["libs/app-modules/src/index.ts"],
+      "@demo-A/react-modules": ["libs/react-modules/src/index.ts"],
+      "@demo-A/utils": ["libs/utils/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
