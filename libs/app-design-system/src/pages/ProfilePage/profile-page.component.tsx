@@ -4,12 +4,20 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 import { ScreenLayout } from '../../layout';
 import { ProfilePageProps } from './profile-page.types';
-import { Button } from '../../atoms';
-import { CreatePasswordCard, LogoutCard } from '../../molecules';
+import { Paper } from '../../atoms';
+import { LogoutCard } from '../../molecules';
+import { CreatePasswordForm } from '../../organisms';
 
 export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
-  const { profileName, profileImageSrc, onLogout, isCreatePasswordEnabled } =
-    props;
+  const {
+    profileName,
+    profileImageSrc,
+    onLogout,
+    isCreatePasswordEnabled,
+    onCreatePassword,
+    isCreatePasswordLoading,
+  } = props;
+
   return (
     <ScreenLayout
       isAuthenticated
@@ -18,7 +26,12 @@ export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
     >
       <Stack spacing={2}>
         {isCreatePasswordEnabled && (
-          <CreatePasswordCard onSubmit={() => undefined} />
+          <Paper>
+            <CreatePasswordForm
+              onSubmit={onCreatePassword}
+              isLoading={isCreatePasswordLoading}
+            />
+          </Paper>
         )}
         <LogoutCard onLogoutClick={onLogout} />
       </Stack>

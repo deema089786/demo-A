@@ -1,6 +1,6 @@
 import { AuthProfileResponse } from '@demo-A/api-types';
 
-import { Profile } from './user.types';
+import { Profile } from './profile.types';
 
 export const mapAuthProfileResponseToProfile = (
   data: AuthProfileResponse,
@@ -14,5 +14,6 @@ export const mapAuthProfileResponseToProfile = (
     firstName: data.firstName,
     lastName: data.lastName,
     fullName,
+    isPasswordCreated: data.isPasswordCreated,
   };
 };

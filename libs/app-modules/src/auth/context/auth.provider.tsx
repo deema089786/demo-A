@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useCallback, useMemo } from 'react';
 import { JWTAccessToken } from '@demo-A/api-types';
 
 import { AuthContext, AuthContextState } from './auth.context';
-import { useProfileQuery } from '../../user';
+import { useProfileQuery } from '../api';
 
 export const AuthProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;

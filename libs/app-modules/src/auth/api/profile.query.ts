@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { ClientApi } from '../../api';
-import { mapAuthProfileResponseToProfile } from '../user.dto';
-import { Profile } from '../user.types';
+import { mapAuthProfileResponseToProfile } from '../../profile/profile.dto';
+import { Profile } from '../../profile/profile.types';
 
-const USE_PROFILE_QUERY_KEY = 'profile-query' as const;
+export const USE_PROFILE_QUERY_KEY = 'profile-query' as const;
 
 export const useProfileQuery = () => {
   const { data, isPending, isError, refetch } = useQuery({

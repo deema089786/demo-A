@@ -5,4 +5,5 @@ export type Profile = {
   firstName: string | null;
   lastName: string | null;
   fullName: string | null;
+  isPasswordCreated: boolean;
 };

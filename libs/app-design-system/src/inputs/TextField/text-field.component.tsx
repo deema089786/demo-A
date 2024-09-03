@@ -14,6 +14,7 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
     placeholder,
     variant,
     errorMessage,
+    type,
   } = props;
 
   return (
@@ -28,6 +29,7 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
       placeholder={placeholder}
       error={Boolean(errorMessage)}
       helperText={errorMessage}
+      type={type}
     />
   );
 };

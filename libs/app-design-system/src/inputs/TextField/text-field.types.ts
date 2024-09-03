@@ -10,4 +10,5 @@ export type TextFieldProps = {
   label?: string;
   placeholder?: string;
   variant?: TextFieldPropsMUI['variant'];
+  type?: TextFieldPropsMUI['type'];
 };

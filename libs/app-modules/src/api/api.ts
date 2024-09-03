@@ -4,6 +4,8 @@ import {
   AuthSignUpByGoogleTokenResponse,
   AuthSignUpByCredentialsPayload,
   AuthSignUpByCredentialsResponse,
+  AuthCreatePasswordPayload,
+  AuthCreatePasswordResponse,
   AuthProfileResponse,
 } from '@demo-A/api-types';
 
@@ -55,6 +57,20 @@ export class ClientApi extends ClientApiBase {
         url: '/auth/profile',
         method: 'GET',
       });
+    return data;
+  }
+
+  static async authCreatePassword(
+    payload: AuthCreatePasswordPayload,
+  ): Promise<AuthCreatePasswordResponse> {
+    const { data } =
+      await ClientApiInstance.axiosInstance.request<AuthCreatePasswordResponse>(
+        {
+          url: '/auth/create-password',
+          method: 'POST',
+          data: payload,
+        },
+      );
     return data;
   }
 }

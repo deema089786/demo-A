@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { JWTAccessToken } from '@demo-A/api-types';
 
-import { Profile } from '../../user';
+import { Profile } from '../../profile';
 
 export type AuthContextState = {
   profile: Profile | null;

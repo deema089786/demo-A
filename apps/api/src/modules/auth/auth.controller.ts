@@ -48,6 +48,7 @@ export class AuthController {
   }
 
   @Post('/create-password')
+  @UseGuards(AuthJwtGuard)
   @UsePipes(new ZodValidationPipe(authCreatePasswordPayloadSchema))
   createPassword(
     @Body() payload: AuthCreatePasswordPayload,

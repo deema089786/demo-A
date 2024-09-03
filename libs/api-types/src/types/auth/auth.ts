@@ -35,11 +35,31 @@ export type AuthSignUpByCredentialsResponse = {
 // endregion
 
 // region Sign Up by Credentials
-export const authCreatePasswordPayloadSchema = z.object({
-  password: z.string(),
-});
+const passwordSchema = z
+  .string()
+  .min(8)
+  .max(20)
+  .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
+  .regex(/[a-z]/, 'Must contain at least one lowercase letter')
+  .regex(/[0-9]/, 'Must contain at least one number');
+// .regex(/[^A-Za-z0-9]/, 'Must contain at least one special character');
+
+export const authCreatePasswordPayloadSchema = z
+  .object({
+    password: passwordSchema,
+    passwordConfirmation: z.string(),
+  })
+  .superRefine(({ passwordConfirmation, password }, ctx) => {
+    if (passwordConfirmation !== password) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Passwords must match',
+        path: ['passwordConfirmation'],
+      });
+    }
+  });
 export type AuthCreatePasswordPayload = z.infer<
-  typeof authSignUpByCredentialsPayloadSchema
+  typeof authCreatePasswordPayloadSchema
 >;
 export type AuthCreatePasswordResponse = {
   success: boolean;
@@ -53,5 +73,6 @@ export interface AuthProfileResponse {
   firstName: string | null;
   lastName: string | null;
   image: string | null;
+  isPasswordCreated: boolean;
 }
 // endregion

@@ -56,6 +56,7 @@ export class AuthService {
       firstName: user.profile.firstName,
       lastName: user.profile.lastName,
       image: user.profile.image,
+      isPasswordCreated: Boolean(user.password),
     };
   }
 
@@ -115,10 +116,10 @@ export class AuthService {
       email: payload.username,
     });
     if (!user || !user.password) {
-      throw new Error('User not found or password incorrect');
+      throw new Error('User not found or password incorrect #1');
     }
-    if (!(await bcrypt.compare(user.password, payload.password))) {
-      throw new Error('User not found or password incorrect');
+    if (!(await bcrypt.compare(payload.password, user.password))) {
+      throw new Error('User not found or password incorrect #2');
     }
 
     const tokens = await this.generateAuthTokens({ userId: user.id });
