@@ -4,6 +4,7 @@ import {
   AuthSignUpByGoogleTokenResponse,
   AuthSignUpByCredentialsPayload,
   AuthSignUpByCredentialsResponse,
+  AuthProfileResponse,
 } from '@demo-A/api-types';
 
 class ClientApiBase {
@@ -33,6 +34,7 @@ export class ClientApi extends ClientApiBase {
       );
     return data;
   }
+
   static async authSighUpByCredentials(
     payload: AuthSignUpByCredentialsPayload,
   ): Promise<AuthSignUpByCredentialsResponse> {
@@ -44,6 +46,15 @@ export class ClientApi extends ClientApiBase {
           data: payload,
         },
       );
+    return data;
+  }
+
+  static async authGetProfile(): Promise<AuthProfileResponse> {
+    const { data } =
+      await ClientApiInstance.axiosInstance.request<AuthProfileResponse>({
+        url: '/auth/profile',
+        method: 'GET',
+      });
     return data;
   }
 }

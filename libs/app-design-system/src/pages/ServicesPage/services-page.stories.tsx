@@ -71,3 +71,12 @@ export const NoServices: Story = {
     editModeEnabled: true,
   },
 };
+export const AuthenticatedEditMode: Story = {
+  args: {
+    services,
+    editModeEnabled: true,
+    isAuthenticated: true,
+    profileName: 'Emma Smith',
+    profileImageSrc: '/images/user-logo.png',
+  },
+};

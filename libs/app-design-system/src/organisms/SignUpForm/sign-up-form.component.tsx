@@ -7,10 +7,6 @@ import {
   AuthSignUpByCredentialsPayload,
   authSignUpByCredentialsPayloadSchema,
 } from '@demo-A/api-types';
-import {
-  useSignUpByGoogleMutation,
-  useSignUpByCredentialsMutation,
-} from '@demo-A/app-modules';
 
 import { SignUpFormProps } from './sign-up-form.types';
 import { Button, GoogleSignUpButton, Typography } from '../../atoms';
@@ -18,9 +14,12 @@ import { TextField } from '../../inputs';
 import { initialValues } from './sign-up-form.constants';
 
 export const SignUpForm: React.FC<SignUpFormProps> = (props) => {
-  const { googleClientId } = props;
-  const { signUpByCredentials } = useSignUpByCredentialsMutation();
-  const { signUpByGoogle } = useSignUpByGoogleMutation();
+  const {
+    googleClientId,
+    onSignUpByGoogleToken,
+    onSignUpByCredentials,
+    isLoading,
+  } = props;
 
   const { register, handleSubmit, isSubmitAvailable } =
     useFormik<AuthSignUpByCredentialsPayload>({
@@ -30,7 +29,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = (props) => {
       enableReinitialize: true,
       initialValues,
       onSubmit: (values) =>
-        signUpByCredentials({
+        onSignUpByCredentials({
           username: values.username,
           password: values.password,
         }),
@@ -70,7 +69,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = (props) => {
         {googleClientId && (
           <GoogleSignUpButton
             clientId={googleClientId}
-            onSuccess={signUpByGoogle}
+            onSuccess={onSignUpByGoogleToken}
           />
         )}
       </Stack>

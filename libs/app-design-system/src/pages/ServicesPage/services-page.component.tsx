@@ -7,7 +7,13 @@ import { ServicesPageProps } from './services-page.types';
 import { ServiceCard, AddServiceCard, NoServicesCard } from '../../molecules';
 
 export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
-  const { services, editModeEnabled } = props;
+  const {
+    services,
+    editModeEnabled,
+    isAuthenticated,
+    profileImageSrc,
+    profileName,
+  } = props;
 
   const bannerServiceCards = useMemo(
     () =>
@@ -40,7 +46,11 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
   );
 
   return (
-    <ScreenLayout user={null}>
+    <ScreenLayout
+      isAuthenticated={isAuthenticated}
+      profileImageSrc={profileImageSrc}
+      profileName={profileName}
+    >
       <Stack spacing={2} divider={<Divider />}>
         <Stack spacing={2}>
           {!bannerServiceCards.length && <NoServicesCard variant="banner" />}

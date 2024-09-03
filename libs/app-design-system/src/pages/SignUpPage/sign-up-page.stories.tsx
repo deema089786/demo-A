@@ -15,5 +15,10 @@ export default meta;
 type Story = StoryObj<typeof SignUpPage>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+    googleClientId: 'test',
+    onSignUpByGoogleToken: () => undefined,
+    onSignUpByCredentials: () => undefined,
+    isLoading: false,
+  },
 };

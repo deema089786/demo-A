@@ -13,7 +13,7 @@ const LOGO_HEIGHT = 32;
 const LOGO_WIDTH = 100;
 
 export const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
-  const { user } = props;
+  const { isAuthenticated, profileImageSrc, profileName } = props;
   return (
     <Container maxWidth="xl" disableGutters>
       <Stack
@@ -38,7 +38,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
           {/*</Button>*/}
         </Stack>
         <Stack direction="row" alignItems="center" spacing={1}>
-          {user ? (
+          {isAuthenticated ? (
             <Button
               component={NavLink}
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -47,14 +47,17 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
               size="small"
               variant="outlined"
               endIcon={
-                user.image ? (
-                  <Avatar src={user.image} sx={{ width: 18, height: 18 }} />
+                profileImageSrc ? (
+                  <Avatar
+                    src={profileImageSrc}
+                    sx={{ width: 18, height: 18 }}
+                  />
                 ) : (
                   <SignInIcon />
                 )
               }
             >
-              {user.firstName || 'My Profile'}
+              {profileName || 'My Profile'}
             </Button>
           ) : (
             <Button

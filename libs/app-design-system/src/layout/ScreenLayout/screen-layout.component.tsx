@@ -9,7 +9,7 @@ import { ScreenFooter } from '../ScreenFooter';
 export const ScreenLayout: React.FC<PropsWithChildren<ScreenLayoutProps>> = (
   props,
 ) => {
-  const { children, user } = props;
+  const { children, isAuthenticated, profileImageSrc, profileName } = props;
   return (
     <Stack
       spacing={4}
@@ -23,7 +23,11 @@ export const ScreenLayout: React.FC<PropsWithChildren<ScreenLayoutProps>> = (
         alignItems: 'center',
       }}
     >
-      <ScreenHeader user={user} />
+      <ScreenHeader
+        isAuthenticated={isAuthenticated}
+        profileImageSrc={profileImageSrc}
+        profileName={profileName}
+      />
       <Container maxWidth="xl" disableGutters sx={{ flex: 1 }}>
         <Stack spacing={2}>{children}</Stack>
       </Container>

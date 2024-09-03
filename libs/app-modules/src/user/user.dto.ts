@@ -1,10 +1,10 @@
 import { AuthProfileResponse } from '@demo-A/api-types';
 
-import { User } from './user.types';
+import { Profile } from './user.types';
 
-export const mapAuthProfileResponseToUser = (
+export const mapAuthProfileResponseToProfile = (
   data: AuthProfileResponse,
-): User => {
+): Profile => {
   const fullName =
     [data.firstName, data.lastName].filter(Boolean).join(' ') || null;
   return {
