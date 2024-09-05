@@ -23,8 +23,14 @@ export class ServicesService {
         title: payload.title,
         shortDescription: payload.shortDescription,
         longDescription: payload.longDescription,
-        imagePath: payload.imagePath,
-        imageUrl: payload.imageUrl,
+        supabaseImage: payload.supabaseImage
+          ? {
+              id: payload.supabaseImage.id,
+              publicUrl: payload.supabaseImage.publicUrl,
+              path: payload.supabaseImage.path,
+              fullPath: payload.supabaseImage.fullPath,
+            }
+          : null,
       });
       return { success: true, service };
     } catch (e) {
@@ -33,7 +39,10 @@ export class ServicesService {
   }
 
   async getServices(): Promise<GetServicesResponse> {
-    const services = await this.servicesRepository.getServices();
+    const services = await this.servicesRepository.getServices(
+      {},
+      { relations: ['supabaseImage'] },
+    );
     return { services };
   }
 }

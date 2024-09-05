@@ -8,6 +8,6 @@ export const mapApiServiceToService = (service: APIService): Service => {
     variant: service.cardVariant,
     title: service.title,
     description: service.shortDescription,
-    imageSrc: service.imageUrl,
+    imageSrc: service.supabaseImage ? service.supabaseImage.publicUrl : null,
   };
 };

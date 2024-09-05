@@ -1,5 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Service, ServiceCardVariant } from '@demo-A/api-types';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Service,
+  ServiceCardVariant,
+  ServiceSupabaseImage,
+  ServiceSupabaseImageEntity,
+} from '@demo-A/api-types';
 
 import { TimestampEntity } from './base/timestamp.entity';
 
@@ -29,4 +34,10 @@ export class ServiceEntity extends TimestampEntity implements Service {
 
   @Column({ type: 'varchar', nullable: true })
   imageUrl!: string | null;
+
+  @OneToOne(
+    () => ServiceSupabaseImageEntity,
+    (serviceSupabaseImageEntity) => serviceSupabaseImageEntity.service,
+  )
+  supabaseImage!: ServiceSupabaseImage | null;
 }

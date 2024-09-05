@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Service, ServiceEntity } from '@demo-A/api-types';
+import {
+  Service,
+  ServiceEntity,
+  ServiceSupabaseImage,
+  ServiceSupabaseImageEntity,
+} from '@demo-A/api-types';
 import { Repository } from 'typeorm';
 import { FindOneOptions } from 'typeorm/find-options/FindOneOptions';
 
@@ -14,6 +19,8 @@ export class ServicesRepository {
   constructor(
     @InjectRepository(ServiceEntity)
     private servicesRepository: Repository<ServiceEntity>,
+    @InjectRepository(ServiceSupabaseImageEntity)
+    private serviceSupabaseImagesRepository: Repository<ServiceSupabaseImageEntity>,
   ) {}
 
   async getServiceById(
@@ -40,8 +47,14 @@ export class ServicesRepository {
     return service;
   }
 
-  async getServices(): Promise<Service[]> {
-    const services = await this.servicesRepository.find();
+  async getServices(
+    where: FindOneOptions<Service>['where'],
+    options: { relations?: FindOneOptions<Service>['relations'] } = {},
+  ): Promise<Service[]> {
+    const services = await this.servicesRepository.find({
+      where,
+      relations: options.relations,
+    });
     return services;
   }
 
@@ -53,9 +66,18 @@ export class ServicesRepository {
     service.title = payload.title;
     service.shortDescription = payload.shortDescription;
     service.longDescription = payload.longDescription;
-    service.imagePath = payload.imagePath;
-    service.imageUrl = payload.imageUrl;
     await this.servicesRepository.save(service);
+
+    if (payload.supabaseImage) {
+      const serviceSupabaseImage = new ServiceSupabaseImageEntity();
+      serviceSupabaseImage.serviceId = service.id;
+      serviceSupabaseImage.supabaseId = payload.supabaseImage.id;
+      serviceSupabaseImage.publicUrl = payload.supabaseImage.publicUrl;
+      serviceSupabaseImage.path = payload.supabaseImage.path;
+      serviceSupabaseImage.fullPath = payload.supabaseImage.fullPath;
+      await this.serviceSupabaseImagesRepository.save(serviceSupabaseImage);
+    }
+
     return service;
   }
 
@@ -65,8 +87,11 @@ export class ServicesRepository {
   ): Promise<void> {
     const service = await this.servicesRepository.findOne({
       where: { id: serviceId },
+      relations: ['supabaseImage'],
     });
     if (!service) throw new Error('Service not found');
-    await this.servicesRepository.update({ id: service.id }, payload);
+    const { supabaseImage, ...rest } = payload;
+    // TODO handle updating supabaseImage
+    await this.servicesRepository.update({ id: service.id }, rest);
   }
 }

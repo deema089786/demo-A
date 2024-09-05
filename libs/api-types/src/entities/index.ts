@@ -5,6 +5,8 @@ export * from './user-profile.entity';
 import { UserProfileEntity } from './user-profile.entity';
 export * from './service.entity';
 import { ServiceEntity } from './service.entity';
+export * from './service-supabase-image.entity';
+import { ServiceSupabaseImageEntity } from './service-supabase-image.entity';
 // endregion
 
 export const entitiesArray = [
@@ -14,5 +16,6 @@ export const entitiesArray = [
   // endregion
   // region Service
   ServiceEntity,
+  ServiceSupabaseImageEntity,
   // endregion
 ];

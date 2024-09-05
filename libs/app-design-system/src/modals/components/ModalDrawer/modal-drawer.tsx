@@ -61,6 +61,7 @@ export const ModalDrawer: React.FC<ModalDrawerProps> = (props) => {
               overflow: 'auto',
               overscrollBehavior: 'contain',
               outline: 'none',
+              paddingTop: '100px',
             }}
             onClick={onClick}
             tabIndex={0}

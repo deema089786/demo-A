@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { Timestamp } from '../base';
+import { ServiceSupabaseImage } from './service-supabase-image';
 
 export type ServiceCardVariant = 'banner' | 'default';
 
@@ -12,8 +13,7 @@ export interface Service extends Timestamp {
   shortDescription: string;
   longDescription: string;
 
-  imagePath: string | null;
-  imageUrl: string | null;
+  supabaseImage: ServiceSupabaseImage | null;
 }
 
 // region Create Service
@@ -22,8 +22,14 @@ export const createServicePayloadSchema = z.object({
   title: z.string(),
   shortDescription: z.string(),
   longDescription: z.string(),
-  imagePath: z.string().nullable(),
-  imageUrl: z.string().nullable(),
+  supabaseImage: z
+    .object({
+      id: z.string(),
+      publicUrl: z.string(),
+      path: z.string(),
+      fullPath: z.string(),
+    })
+    .nullable(),
 });
 export type CreateServicePayload = z.infer<typeof createServicePayloadSchema>;
 export type CreateServiceResponse = {

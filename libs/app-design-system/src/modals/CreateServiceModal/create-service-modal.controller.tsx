@@ -1,15 +1,13 @@
 import React, { useCallback, useMemo } from 'react';
-import { v4 as uuid } from 'uuid';
 import { Stack, ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { useModal } from '@ebay/nice-modal-react';
-import { useFileSelector, useFormik } from '@demo-A/utils';
+import { uploadFileToStorage, useFileSelector, useFormik } from '@demo-A/utils';
 import {
   CreateServicePayload,
   createServicePayloadSchema,
 } from '@demo-A/api-types';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { useCreateServiceMutation, useProfile } from '@demo-A/app-modules';
-import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 import { ImageSelector } from '../../molecules';
 import { Button, Typography, Paper } from '../../atoms';
@@ -35,7 +33,7 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
 
   const handleCancel = useCallback(() => {
     openConfirmationModal({
-      title: 'Are you sure?',
+      title: 'Cancel creating new service?',
       description: 'All changes will be lost.',
       onConfirm: () => {
         onCancel?.();
@@ -57,7 +55,7 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
     select: selectFile,
     clear: clearFile,
   } = useFileSelector({ accept: '.png, .jpg' });
-  const { register, handleSubmit, isSubmitAvailable } =
+  const { register, setFieldValue, values, handleSubmit, isSubmitAvailable } =
     useFormik<CreateServicePayload>({
       initialValues,
       validationSchema: toFormikValidationSchema(createServicePayloadSchema),
@@ -65,59 +63,40 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
         if (!profile.supabase) return;
         if (!file) return;
 
-        const supabaseClient = createSupabaseClient(
-          profile.supabase.projectUrl,
-          profile.supabase.apiKey,
-        );
-
-        const fileName = uuid();
-        const { data, error } = await supabaseClient.storage
-          .from('demo-a-service-images')
-          .upload(fileName, file, {
-            cacheControl: '3600',
-            upsert: false,
-          });
-
-        if (error) console.error(error);
-        if (!data) return;
-
-        const {
-          data: { publicUrl },
-        } = supabaseClient.storage
-          .from('demo-a-service-images')
-          .getPublicUrl(data.path);
+        const { id, publicUrl, path, fullPath } = await uploadFileToStorage({
+          file,
+          bucket: 'demo-a-service-images',
+          auth: {
+            projectUrl: profile.supabase.projectUrl,
+            apiKey: profile.supabase.apiKey,
+          },
+        });
 
         await createService({
           cardVariant: values.cardVariant,
           title: values.title,
           shortDescription: values.shortDescription,
           longDescription: values.longDescription,
-          imagePath: data.path,
-          imageUrl: publicUrl,
+          supabaseImage: { id, publicUrl, path, fullPath },
         });
       },
     });
 
   return (
-    <ModalDrawer
-      open={visible}
-      // prevent closing on clicking outside
-      onClose={undefined}
-      onExited={handleExited}
-    >
-      <Stack spacing={3} p={3} pt={4} component="form" onSubmit={handleSubmit}>
+    <ModalDrawer open={visible} onClose={handleCancel} onExited={handleExited}>
+      <Stack spacing={3} p={2} pb={5} component="form" onSubmit={handleSubmit}>
         <Typography variant="h6" component="h1">
           Creating a service card
         </Typography>
         <Stack spacing={1}>
           <ToggleButtonGroup
             color="primary"
-            value={initialVariant}
             exclusive
-            onChange={(v) => console.log({ v })}
             fullWidth
             size="small"
             aria-label="Variant"
+            {...register('cardVariant')}
+            onChange={(_, value) => setFieldValue('cardVariant', value)}
           >
             <ToggleButton value="banner">Banner</ToggleButton>
             <ToggleButton value="default">Default</ToggleButton>
@@ -129,10 +108,10 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
               color="textSecondary"
               lineHeight="0.8rem"
             >
-              {initialVariant === 'banner'
+              {values.cardVariant === 'banner'
                 ? 'Banner cards are displayed at the top of the screen and have bigger size.'
                 : null}
-              {initialVariant === 'default'
+              {values.cardVariant === 'default'
                 ? 'Default cards are displayed at the lower part of the screen and looks like list items.'
                 : null}
             </Typography>
@@ -163,18 +142,30 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
             maxRows={8}
           />
         </Stack>
-        <Stack spacing={1}>
-          <Button variant="contained">Preview</Button>
+        <Stack spacing={2}>
           <Button
             variant="contained"
             type="submit"
             disabled={!isSubmitAvailable}
           >
-            Create
+            Publish
           </Button>
-          <Button variant="outlined" onClick={handleCancel}>
-            Cancel
-          </Button>
+          <Stack direction="row" spacing={1} justifyContent="space-between">
+            <Button fullWidth variant="outlined">
+              Preview
+            </Button>
+            <Button fullWidth variant="outlined">
+              Save Draft
+            </Button>
+            <Button
+              fullWidth
+              color="secondary"
+              variant="outlined"
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+          </Stack>
         </Stack>
       </Stack>
     </ModalDrawer>

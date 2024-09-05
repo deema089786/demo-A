@@ -7,6 +7,5 @@ export const getInitialValues = (params: {
   title: '',
   shortDescription: '',
   longDescription: '',
-  imageUrl: null,
-  imagePath: null,
+  supabaseImage: null,
 });

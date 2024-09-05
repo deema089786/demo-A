@@ -5,8 +5,12 @@ export interface ServicesRepositoryCreateServicePayload {
   title: string;
   shortDescription: string;
   longDescription: string;
-  imagePath: string | null;
-  imageUrl: string | null;
+  supabaseImage: {
+    id: string;
+    publicUrl: string;
+    path: string;
+    fullPath: string;
+  } | null;
 }
 
 export interface ServicesRepositoryUpdateServicePayload {
@@ -14,6 +18,10 @@ export interface ServicesRepositoryUpdateServicePayload {
   title?: string;
   shortDescription?: string;
   longDescription?: string;
-  imagePath?: string | null;
-  imageUrl?: string | null;
+  supabaseImage?: {
+    id: string;
+    publicUrl: string;
+    path: string;
+    fullPath: string;
+  } | null;
 }

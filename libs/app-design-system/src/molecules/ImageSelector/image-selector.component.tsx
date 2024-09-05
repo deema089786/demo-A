@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import DeleteIcon from '@mui/icons-material/DeleteForever';
 import SelectImageIcon from '@mui/icons-material/AddPhotoAlternate';
 import Stack from '@mui/material/Stack';
@@ -8,7 +8,9 @@ import { Paper, Button } from '../../atoms';
 
 const HEIGHT = '140px';
 
-export const ImageSelector: React.FC<ImageSelectorProps> = (props) => {
+// Memo user because of src prop
+// src can be large Base64 string which take a long time to re-render
+export const ImageSelector: React.FC<ImageSelectorProps> = memo((props) => {
   const { src, onClearClick, onSelectClick } = props;
 
   return (
@@ -51,4 +53,4 @@ export const ImageSelector: React.FC<ImageSelectorProps> = (props) => {
       </Stack>
     </Paper>
   );
-};
+});
