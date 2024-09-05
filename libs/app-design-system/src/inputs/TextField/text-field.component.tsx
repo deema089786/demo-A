@@ -15,6 +15,9 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
     variant,
     errorMessage,
     type,
+    multiline,
+    maxRows,
+    minRows,
   } = props;
 
   return (
@@ -30,6 +33,9 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
       error={Boolean(errorMessage)}
       helperText={errorMessage}
       type={type}
+      multiline={multiline}
+      maxRows={maxRows}
+      minRows={minRows}
     />
   );
 };

@@ -11,4 +11,7 @@ export type TextFieldProps = {
   placeholder?: string;
   variant?: TextFieldPropsMUI['variant'];
   type?: TextFieldPropsMUI['type'];
+  multiline?: TextFieldPropsMUI['multiline'];
+  minRows?: TextFieldPropsMUI['minRows'];
+  maxRows?: TextFieldPropsMUI['maxRows'];
 };

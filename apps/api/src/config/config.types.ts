@@ -12,7 +12,13 @@ export interface ConfigGoogle {
   clientSecrete: string;
 }
 
+export interface Supabase {
+  projectUrl: string;
+  apiKey: string;
+}
+
 export interface Config {
   database: ConfigDatabase;
   google: ConfigGoogle;
+  supabase: Supabase;
 }

@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User, UserProfile } from '@demo-A/api-types';
+import { User, UserProfile, UserRole } from '@demo-A/api-types';
 
 import { TimestampEntity } from './base/timestamp.entity';
 import { UserProfileEntity } from './user-profile.entity';
@@ -18,6 +18,13 @@ export class UserEntity extends TimestampEntity implements User {
   @Index('user-phone-number-idx')
   @Column({ type: 'varchar', unique: true, nullable: true })
   phoneNumber!: string | null;
+
+  @Column({
+    type: 'enum',
+    enum: ['admin', 'user'],
+    default: 'user',
+  })
+  role!: UserRole;
 
   @Index('user-email-idx')
   @Column({ type: 'varchar', unique: true, nullable: true })

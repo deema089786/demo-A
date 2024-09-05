@@ -1,2 +1,3 @@
 import { AuthModule } from './auth';
-export const modules = [AuthModule];
+import { ServicesModule } from './services';
+export const modules = [AuthModule, ServicesModule];

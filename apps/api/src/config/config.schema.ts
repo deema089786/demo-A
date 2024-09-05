@@ -55,4 +55,18 @@ export const configSchema: Schema<Config> = {
       default: null,
     },
   },
+  supabase: {
+    projectUrl: {
+      doc: '',
+      format: String,
+      env: 'SUPABASE_PROJECT_URL',
+      default: null,
+    },
+    apiKey: {
+      doc: '',
+      format: String,
+      env: 'SUPABASE_API_KEY',
+      default: null,
+    },
+  },
 };

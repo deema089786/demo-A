@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
 import { JWTAccessToken, JWTRefreshToken } from '../base';
+import { UserRole } from '../users';
 
 export enum CookiesField {
   accessToken = 'accessToken',
   refreshToken = 'refreshToken',
 }
-
 // region Sign Up by Google
 export const authSignUpByGoogleTokenPayloadSchema = z.object({
   token: z.string(),
@@ -74,5 +74,7 @@ export interface AuthProfileResponse {
   lastName: string | null;
   image: string | null;
   isPasswordCreated: boolean;
+  role: UserRole;
+  supabase: { projectUrl: string; apiKey: string } | null;
 }
 // endregion

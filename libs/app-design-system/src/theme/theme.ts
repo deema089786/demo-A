@@ -16,6 +16,14 @@ const defaultThemeOptions: ThemeOptions = {
         },
       },
     },
+    MuiToggleButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          borderRadius: 10000,
+        },
+      },
+    },
   },
   typography: {
     fontFamily: [

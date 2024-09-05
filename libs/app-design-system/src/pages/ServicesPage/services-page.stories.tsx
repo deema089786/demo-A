@@ -56,27 +56,31 @@ const services: Service[] = [
 export const Default: Story = {
   args: {
     services,
-    editModeEnabled: false,
+    isEditModeEnabled: false,
+    onCreateServiceClick: () => undefined,
   },
 };
 export const EditMode: Story = {
   args: {
     services,
-    editModeEnabled: true,
+    isEditModeEnabled: true,
+    onCreateServiceClick: () => undefined,
   },
 };
 export const NoServices: Story = {
   args: {
     services: [],
-    editModeEnabled: true,
+    isEditModeEnabled: true,
+    onCreateServiceClick: () => undefined,
   },
 };
 export const AuthenticatedEditMode: Story = {
   args: {
     services,
-    editModeEnabled: true,
+    isEditModeEnabled: true,
     isAuthenticated: true,
     profileName: 'Emma Smith',
     profileImageSrc: '/images/user-logo.png',
+    onCreateServiceClick: () => undefined,
   },
 };

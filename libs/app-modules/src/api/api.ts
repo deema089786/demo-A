@@ -7,6 +7,9 @@ import {
   AuthCreatePasswordPayload,
   AuthCreatePasswordResponse,
   AuthProfileResponse,
+  CreateServicePayload,
+  CreateServiceResponse,
+  GetServicesResponse,
 } from '@demo-A/api-types';
 
 class ClientApiBase {
@@ -71,6 +74,27 @@ export class ClientApi extends ClientApiBase {
           data: payload,
         },
       );
+    return data;
+  }
+
+  static async createService(
+    payload: CreateServicePayload,
+  ): Promise<CreateServiceResponse> {
+    const { data } =
+      await ClientApiInstance.axiosInstance.request<CreateServiceResponse>({
+        url: '/services/create',
+        method: 'POST',
+        data: payload,
+      });
+    return data;
+  }
+
+  static async getServices(): Promise<GetServicesResponse> {
+    const { data } =
+      await ClientApiInstance.axiosInstance.request<GetServicesResponse>({
+        url: '/services',
+        method: 'GET',
+      });
     return data;
   }
 }

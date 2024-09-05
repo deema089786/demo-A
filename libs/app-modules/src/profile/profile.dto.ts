@@ -15,5 +15,7 @@ export const mapAuthProfileResponseToProfile = (
     lastName: data.lastName,
     fullName,
     isPasswordCreated: data.isPasswordCreated,
+    isEditModeEnabled: data.role === 'admin',
+    supabase: data.supabase,
   };
 };

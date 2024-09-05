@@ -9,10 +9,11 @@ import { ServiceCard, AddServiceCard, NoServicesCard } from '../../molecules';
 export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
   const {
     services,
-    editModeEnabled,
+    isEditModeEnabled,
     isAuthenticated,
     profileImageSrc,
     profileName,
+    onCreateServiceClick,
   } = props;
 
   const bannerServiceCards = useMemo(
@@ -21,6 +22,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
         .filter((service) => service.variant === 'banner')
         .map((service) => (
           <ServiceCard
+            key={service.id}
             imageSrc={service.imageSrc}
             variant={service.variant}
             title={service.title}
@@ -36,6 +38,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
         .filter((service) => service.variant === 'default')
         .map((service) => (
           <ServiceCard
+            key={service.id}
             imageSrc={service.imageSrc}
             variant={service.variant}
             title={service.title}
@@ -55,15 +58,21 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
         <Stack spacing={2}>
           {!bannerServiceCards.length && <NoServicesCard variant="banner" />}
           {bannerServiceCards}
-          {editModeEnabled && (
-            <AddServiceCard variant="banner" onClick={() => undefined} />
+          {isEditModeEnabled && (
+            <AddServiceCard
+              variant="banner"
+              onClick={() => onCreateServiceClick('banner')}
+            />
           )}
         </Stack>
         <Stack spacing={1}>
           {!defaultServiceCards.length && <NoServicesCard variant="default" />}
           {defaultServiceCards}
-          {editModeEnabled && (
-            <AddServiceCard variant="default" onClick={() => undefined} />
+          {isEditModeEnabled && (
+            <AddServiceCard
+              variant="default"
+              onClick={() => onCreateServiceClick('default')}
+            />
           )}
         </Stack>
       </Stack>

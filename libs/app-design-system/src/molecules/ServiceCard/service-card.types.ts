@@ -4,5 +4,5 @@ export type ServiceCardProps = {
   variant: ServiceCardVariant;
   title: string;
   description: string;
-  imageSrc: string;
+  imageSrc: string | null;
 };

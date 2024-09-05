@@ -22,9 +22,13 @@ export const ServiceCard: React.FC<ServiceCardProps> = (props) => {
   return (
     <PaperButton>
       <Stack>
-        {variant === 'banner' && <BannerImage src={imageSrc} alt={title} />}
+        {variant === 'banner' && imageSrc && (
+          <BannerImage src={imageSrc} alt={title} />
+        )}
         <Stack direction="row">
-          {variant === 'default' && <DefaultImage src={imageSrc} alt={title} />}
+          {variant === 'default' && imageSrc && (
+            <DefaultImage src={imageSrc} alt={title} />
+          )}
           <Stack p={variant === 'default' ? 1 : 2}>
             <Typography variant="body1" fontWeight="bold">
               {title}

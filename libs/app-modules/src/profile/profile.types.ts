@@ -6,4 +6,6 @@ export type Profile = {
   lastName: string | null;
   fullName: string | null;
   isPasswordCreated: boolean;
+  isEditModeEnabled: boolean;
+  supabase: { projectUrl: string; apiKey: string } | null;
 };

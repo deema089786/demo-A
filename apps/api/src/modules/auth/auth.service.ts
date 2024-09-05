@@ -50,6 +50,8 @@ export class AuthService {
     if (!user) throw new Error('User not found');
     if (!user.profile) throw new Error('User profile not found');
 
+    const supabase = this.configService.getBy('supabase');
+
     return {
       id: user.id,
       email: user.email,
@@ -57,6 +59,10 @@ export class AuthService {
       lastName: user.profile.lastName,
       image: user.profile.image,
       isPasswordCreated: Boolean(user.password),
+      role: user.role,
+      supabase: ['admin'].includes(user.role)
+        ? { projectUrl: supabase.projectUrl, apiKey: supabase.apiKey }
+        : null,
     };
   }
 
