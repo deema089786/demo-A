@@ -1,15 +1,14 @@
 import React, { PropsWithChildren } from 'react';
 import ButtonBase, { ButtonBaseProps } from '@mui/material/ButtonBase';
 
-import { Paper } from '../Paper';
+import { Paper, PaperProps } from '../Paper';
 
-export const PaperButton: React.FC<PropsWithChildren<ButtonBaseProps>> = (
-  props,
-) => {
-  const { children, ...rest } = props;
+export const PaperButton: React.FC<
+  PropsWithChildren<ButtonBaseProps & { variant?: PaperProps['variant'] }>
+> = (props) => {
+  const { children, variant, ...rest } = props;
   return (
     <ButtonBase
-      component={Paper}
       sx={{
         display: 'block',
         overflow: 'hidden',
@@ -18,7 +17,7 @@ export const PaperButton: React.FC<PropsWithChildren<ButtonBaseProps>> = (
       }}
       {...rest}
     >
-      {children}
+      <Paper variant={variant}>{children}</Paper>
     </ButtonBase>
   );
 };

@@ -11,6 +11,7 @@ export const ModalPaper = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   alignItems: 'stretch',
   justifyContent: 'center',
+  overflow: 'hidden',
 }));
 
 type ModalDrawerProps = {

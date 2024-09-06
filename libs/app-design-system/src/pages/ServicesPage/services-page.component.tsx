@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
-import { Divider } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import AddServiceIcon from '@mui/icons-material/CreateNewFolder';
 
 import { ScreenLayout } from '../../layout';
 import { ServicesPageProps } from './services-page.types';
-import { ServiceCard, AddServiceCard, NoServicesCard } from '../../molecules';
+import { ServiceCard, NoServicesCard } from '../../molecules';
+import { Button } from '../../atoms';
 
 export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
   const {
@@ -26,7 +28,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
             imageSrc={service.imageSrc}
             variant={service.variant}
             title={service.title}
-            description={service.description}
+            description={service.shortDescription}
+            href={service.inAppPath}
           />
         )),
     [services],
@@ -42,7 +45,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
             imageSrc={service.imageSrc}
             variant={service.variant}
             title={service.title}
-            description={service.description}
+            description={service.shortDescription}
+            href={service.inAppPath}
           />
         )),
     [services],
@@ -59,20 +63,28 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
           {!bannerServiceCards.length && <NoServicesCard variant="banner" />}
           {bannerServiceCards}
           {isEditModeEnabled && (
-            <AddServiceCard
-              variant="banner"
+            <Button
+              variant="outlined"
+              size="large"
               onClick={() => onCreateServiceClick('banner')}
-            />
+              startIcon={<AddServiceIcon />}
+            >
+              Add banner service
+            </Button>
           )}
         </Stack>
         <Stack spacing={1}>
           {!defaultServiceCards.length && <NoServicesCard variant="default" />}
           {defaultServiceCards}
           {isEditModeEnabled && (
-            <AddServiceCard
-              variant="default"
+            <Button
+              variant="outlined"
+              size="large"
               onClick={() => onCreateServiceClick('default')}
-            />
+              startIcon={<AddServiceIcon />}
+            >
+              Add service
+            </Button>
           )}
         </Stack>
       </Stack>

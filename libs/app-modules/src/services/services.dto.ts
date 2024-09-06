@@ -7,7 +7,9 @@ export const mapApiServiceToService = (service: APIService): Service => {
     id: service.id,
     variant: service.cardVariant,
     title: service.title,
-    description: service.shortDescription,
+    shortDescription: service.shortDescription,
+    longDescription: service.longDescription,
     imageSrc: service.supabaseImage ? service.supabaseImage.publicUrl : null,
+    inAppPath: `/services/${service.id}`,
   };
 };

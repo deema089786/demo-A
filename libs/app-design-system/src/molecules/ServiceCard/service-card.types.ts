@@ -5,4 +5,5 @@ export type ServiceCardProps = {
   title: string;
   description: string;
   imageSrc: string | null;
+  href: string;
 };

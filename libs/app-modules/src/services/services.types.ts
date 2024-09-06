@@ -2,6 +2,8 @@ export type Service = {
   id: string;
   imageSrc: string | null;
   title: string;
-  description: string;
+  shortDescription: string;
+  longDescription: string;
   variant: 'banner' | 'default';
+  inAppPath: string;
 };

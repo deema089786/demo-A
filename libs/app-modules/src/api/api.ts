@@ -10,6 +10,7 @@ import {
   CreateServicePayload,
   CreateServiceResponse,
   GetServicesResponse,
+  GetServiceResponse,
 } from '@demo-A/api-types';
 
 class ClientApiBase {
@@ -93,6 +94,17 @@ export class ClientApi extends ClientApiBase {
     const { data } =
       await ClientApiInstance.axiosInstance.request<GetServicesResponse>({
         url: '/services',
+        method: 'GET',
+      });
+    return data;
+  }
+
+  static async getServiceById(params: {
+    id: string;
+  }): Promise<GetServiceResponse> {
+    const { data } =
+      await ClientApiInstance.axiosInstance.request<GetServiceResponse>({
+        url: `/services/${params.id}`,
         method: 'GET',
       });
     return data;

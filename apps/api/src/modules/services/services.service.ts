@@ -3,6 +3,7 @@ import { ServicesRepository } from '@demo-A/api-modules';
 import {
   CreateServicePayload,
   CreateServiceResponse,
+  GetServiceResponse,
   GetServicesResponse,
 } from '@demo-A/api-types';
 import { ClsService } from 'nestjs-cls';
@@ -44,5 +45,15 @@ export class ServicesService {
       { relations: ['supabaseImage'] },
     );
     return { services };
+  }
+
+  async getServiceById(params: {
+    serviceId: string;
+  }): Promise<GetServiceResponse> {
+    const service = await this.servicesRepository.getServiceById(
+      params.serviceId,
+      { relations: ['supabaseImage'] },
+    );
+    return { service };
   }
 }

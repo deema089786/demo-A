@@ -25,7 +25,7 @@ const NotAuthenticatedOnly: React.FC<PropsWithChildren> = (props) => {
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/*',
     element: <ServicesScreen />,
   },
   {

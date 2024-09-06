@@ -95,7 +95,7 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
             fullWidth
             size="small"
             aria-label="Variant"
-            {...register('cardVariant')}
+            value={values.cardVariant}
             onChange={(_, value) => setFieldValue('cardVariant', value)}
           >
             <ToggleButton value="banner">Banner</ToggleButton>

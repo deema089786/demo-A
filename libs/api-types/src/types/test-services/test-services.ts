@@ -42,4 +42,8 @@ export type CreateServiceResponse = {
 export type GetServicesResponse = {
   services: Service[];
 };
+
+export type GetServiceResponse = {
+  service: Service | null;
+};
 //

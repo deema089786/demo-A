@@ -5,12 +5,14 @@ import {
   Get,
   UseGuards,
   UsePipes,
+  Param,
 } from '@nestjs/common';
 import {
   createServicePayloadSchema,
   CreateServicePayload,
   CreateServiceResponse,
   GetServicesResponse,
+  GetServiceResponse,
 } from '@demo-A/api-types';
 import { ZodValidationPipe } from '@demo-A/nest-utils';
 
@@ -25,6 +27,13 @@ export class ServicesController {
   @Get()
   getServices(): Promise<GetServicesResponse> {
     return this.servicesService.getServices();
+  }
+
+  @Get('/:serviceId')
+  getServiceById(
+    @Param('serviceId') serviceId: string,
+  ): Promise<GetServiceResponse> {
+    return this.servicesService.getServiceById({ serviceId });
   }
 
   @Post('/create')
