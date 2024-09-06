@@ -1,13 +1,13 @@
 import React from 'react';
-import ButtonMUI from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 import { ButtonProps } from './button.types';
 
 export const Button: React.FC<ButtonProps> = (props) => {
   const { children, ...rest } = props;
   return (
-    <ButtonMUI role="button" {...rest}>
+    <LoadingButton role="button" {...rest}>
       {children}
-    </ButtonMUI>
+    </LoadingButton>
   );
 };

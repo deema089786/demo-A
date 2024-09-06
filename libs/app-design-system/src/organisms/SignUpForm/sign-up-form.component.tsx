@@ -2,6 +2,7 @@ import React from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import Stack from '@mui/material/Stack';
 import { Divider } from '@mui/material';
+import { LockOpen as SignUpIcon } from '@mui/icons-material';
 import { useFormik } from '@demo-A/utils';
 import {
   AuthSignUpByCredentialsPayload,
@@ -21,7 +22,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = (props) => {
     isLoading,
   } = props;
 
-  const { register, handleSubmit, isSubmitAvailable } =
+  const { register, handleSubmit, isSubmitAvailable, isSubmitting } =
     useFormik<AuthSignUpByCredentialsPayload>({
       validationSchema: toFormikValidationSchema(
         authSignUpByCredentialsPayloadSchema,
@@ -61,6 +62,9 @@ export const SignUpForm: React.FC<SignUpFormProps> = (props) => {
           size="large"
           type="submit"
           disabled={!isSubmitAvailable}
+          loading={isSubmitting}
+          loadingPosition="start"
+          startIcon={<SignUpIcon />}
         >
           Sign Up
         </Button>

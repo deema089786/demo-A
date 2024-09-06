@@ -1,2 +1,2 @@
-import { ButtonProps as ButtonPropsMUI } from '@mui/material/Button';
+import { LoadingButtonProps as ButtonPropsMUI } from '@mui/lab/LoadingButton';
 export type ButtonProps = ButtonPropsMUI;

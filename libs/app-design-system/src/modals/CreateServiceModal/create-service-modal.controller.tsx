@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo } from 'react';
 import { Stack, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { DriveFolderUpload as PublishIcon } from '@mui/icons-material';
 import { useModal } from '@ebay/nice-modal-react';
-import { uploadFileToStorage, useFileSelector, useFormik } from '@demo-A/utils';
+import { useFileSelector, useFormik } from '@demo-A/utils';
 import {
   CreateServicePayload,
   createServicePayloadSchema,
 } from '@demo-A/api-types';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { useCreateServiceMutation, useProfile } from '@demo-A/app-modules';
 
 import { ImageSelector } from '../../molecules';
 import { Button, Typography, Paper } from '../../atoms';
@@ -21,8 +21,7 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
   props,
 ) => {
   const { open: openConfirmationModal } = useConfirmationModal();
-  const { initialVariant, onCancel, onClosed } = props;
-  const profile = useProfile();
+  const { initialVariant, onCancel, onClosed, onSubmit } = props;
 
   const { visible, hide, remove } = useModal();
 
@@ -42,9 +41,6 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
     });
   }, [hide, onCancel, openConfirmationModal]);
 
-  const { createService } = useCreateServiceMutation({
-    onSuccess: hide,
-  });
   const initialValues = useMemo(
     () => getInitialValues({ variant: initialVariant }),
     [initialVariant],
@@ -55,32 +51,25 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
     select: selectFile,
     clear: clearFile,
   } = useFileSelector({ accept: '.png, .jpg' });
-  const { register, setFieldValue, values, handleSubmit, isSubmitAvailable } =
-    useFormik<CreateServicePayload>({
-      initialValues,
-      validationSchema: toFormikValidationSchema(createServicePayloadSchema),
-      onSubmit: async (values) => {
-        if (!profile.supabase) return;
-        if (!file) return;
-
-        const { id, publicUrl, path, fullPath } = await uploadFileToStorage({
-          file,
-          bucket: 'demo-a-service-images',
-          auth: {
-            projectUrl: profile.supabase.projectUrl,
-            apiKey: profile.supabase.apiKey,
-          },
-        });
-
-        await createService({
-          cardVariant: values.cardVariant,
-          title: values.title,
-          shortDescription: values.shortDescription,
-          longDescription: values.longDescription,
-          supabaseImage: { id, publicUrl, path, fullPath },
-        });
-      },
-    });
+  const {
+    register,
+    setFieldValue,
+    values,
+    handleSubmit,
+    isSubmitAvailable,
+    isSubmitting,
+  } = useFormik<CreateServicePayload>({
+    initialValues,
+    validationSchema: toFormikValidationSchema(createServicePayloadSchema),
+    onSubmit: (values) => {
+      if (!file) return;
+      return onSubmit({
+        values,
+        media: { image: file },
+        modalActions: { hide },
+      });
+    },
+  });
 
   return (
     <ModalDrawer open={visible} onClose={handleCancel} onExited={handleExited}>
@@ -147,6 +136,9 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
             variant="contained"
             type="submit"
             disabled={!isSubmitAvailable}
+            startIcon={<PublishIcon />}
+            loading={isSubmitting}
+            loadingPosition="start"
           >
             Publish
           </Button>

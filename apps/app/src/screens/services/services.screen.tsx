@@ -1,7 +1,13 @@
 import React, { useCallback } from 'react';
 import { ServicesPage, useCreateServiceModal } from '@demo-A/app-design-system';
-import { useAuth, useServicesQuery } from '@demo-A/app-modules';
+import {
+  useAuth,
+  useCreateServiceMutation,
+  useServicesQuery,
+} from '@demo-A/app-modules';
 import { Routes, Route } from 'react-router-dom';
+import { CreateServicePayload } from '@demo-A/api-types';
+import { uploadFileToStorage } from '@demo-A/utils';
 
 import { ServiceDetailsScreen } from '../service-details';
 
@@ -9,13 +15,49 @@ export const ServicesScreen: React.FC = () => {
   const { profile } = useAuth();
   const { open: openCreateServiceModal } = useCreateServiceModal();
 
-  const handleCreateServiceClick = useCallback(
-    (variant: 'banner' | 'default') =>
-      openCreateServiceModal({ initialVariant: variant }),
-    [openCreateServiceModal],
+  const { services } = useServicesQuery();
+
+  const { createService } = useCreateServiceMutation();
+
+  const handleCreateServiceSubmit = useCallback(
+    async (params: {
+      values: CreateServicePayload;
+      media: { image: File };
+      modalActions: { hide(): void };
+    }) => {
+      const { values, media, modalActions } = params;
+      if (!profile?.supabase) return;
+
+      const { id, publicUrl, path, fullPath } = await uploadFileToStorage({
+        file: media.image,
+        bucket: 'demo-a-service-images',
+        auth: {
+          projectUrl: profile.supabase.projectUrl,
+          apiKey: profile.supabase.apiKey,
+        },
+      });
+
+      await createService({
+        cardVariant: values.cardVariant,
+        title: values.title,
+        shortDescription: values.shortDescription,
+        longDescription: values.longDescription,
+        supabaseImage: { id, publicUrl, path, fullPath },
+      });
+
+      modalActions.hide();
+    },
+    [createService, profile?.supabase],
   );
 
-  const { services } = useServicesQuery();
+  const handleCreateServiceClick = useCallback(
+    (variant: 'banner' | 'default') =>
+      openCreateServiceModal({
+        initialVariant: variant,
+        onSubmit: handleCreateServiceSubmit,
+      }),
+    [handleCreateServiceSubmit, openCreateServiceModal],
+  );
 
   if (!profile) {
     return (
