@@ -53,7 +53,7 @@ const ServiceSettingsButton: React.FC<{
       <Stack direction="row" alignItems="center" spacing={1}>
         <StatusLogo variant={status} />
         <IconButton size="small" onClick={onClick}>
-          <ActionsIcon color="primary" />
+          <ActionsIcon color="primary" fontSize="small" />
         </IconButton>
       </Stack>
     </Paper>

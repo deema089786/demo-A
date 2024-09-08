@@ -26,7 +26,7 @@ ClientApi.setJWTAccessTokenGetter(async () => ({
 root.render(
   <StrictMode>
     <ThemeProvider theme={darkTheme}>
-      <SnackbarProvider>
+      <SnackbarProvider dense autoHideDuration={2000}>
         <CssBaseline />
         <QueryClientProvider client={queryClient}>
           <AuthProvider>

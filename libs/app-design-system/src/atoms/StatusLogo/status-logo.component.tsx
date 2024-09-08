@@ -6,7 +6,7 @@ import { StatusLogoProps } from './status-logo.types';
 const colors: Record<StatusLogoProps['variant'], ChipProps['color']> = {
   active: 'success',
   archived: 'warning',
-  draft: 'warning',
+  draft: 'default',
   deleted: 'warning',
 };
 
@@ -27,5 +27,7 @@ export const StatusLogo: React.FC<StatusLogoProps> = (props) => {
     [variant],
   );
 
-  return <Chip color={color} label={label} size={size} />;
+  return (
+    <Chip color={color} label={label} size={size} sx={{ fontWeight: 'bold' }} />
+  );
 };
