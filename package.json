@@ -99,6 +99,7 @@
     "leva": "^0.9.35",
     "maath": "^0.10.7",
     "nestjs-cls": "^4.3.0",
+    "notistack": "^3.0.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.12.0",

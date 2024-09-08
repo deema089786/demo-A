@@ -1,4 +1,4 @@
-import { ServiceCardVariant } from '@demo-A/api-types';
+import { ServiceCardVariant, ServiceStatus } from '@demo-A/api-types';
 
 export interface ServicesRepositoryCreateServicePayload {
   cardVariant: ServiceCardVariant;
@@ -14,6 +14,7 @@ export interface ServicesRepositoryCreateServicePayload {
 }
 
 export interface ServicesRepositoryUpdateServicePayload {
+  status?: ServiceStatus;
   cardVariant?: ServiceCardVariant;
   title?: string;
   shortDescription?: string;

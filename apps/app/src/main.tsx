@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react';
+import { SnackbarProvider } from 'notistack';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
@@ -25,14 +26,16 @@ ClientApi.setJWTAccessTokenGetter(async () => ({
 root.render(
   <StrictMode>
     <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <NiceModalProvider>
-            <App />
-          </NiceModalProvider>
-        </AuthProvider>
-      </QueryClientProvider>
+      <SnackbarProvider>
+        <CssBaseline />
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <NiceModalProvider>
+              <App />
+            </NiceModalProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </SnackbarProvider>
     </ThemeProvider>
   </StrictMode>,
 );

@@ -40,6 +40,3 @@ export class AuthJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     return user;
   }
 }
-
-@Injectable()
-export class AuthJwtGuard extends AuthGuard('jwt') {}

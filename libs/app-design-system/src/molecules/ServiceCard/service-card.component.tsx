@@ -1,10 +1,13 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
+import ActionsIcon from '@mui/icons-material/Settings';
 import { styled } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
+import { ServiceStatus } from '@demo-A/app-modules';
 
 import { ServiceCardProps } from './service-card.types';
-import { PaperButton, Typography } from '../../atoms';
+import { Paper, PaperButton, StatusLogo, Typography } from '../../atoms';
 
 const BannerImage = styled('img')({
   height: '100px',
@@ -33,15 +36,48 @@ const ServiceCardText: React.FC<{ title: string; description: string }> = (
   );
 };
 
+const ServiceSettingsButton: React.FC<{
+  onClick: () => void;
+  status: ServiceStatus;
+}> = (props) => {
+  const { onClick, status } = props;
+  return (
+    <Paper
+      variant="outlined"
+      sx={{ position: 'absolute', top: 4, right: 4, borderRadius: 100000 }}
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+    >
+      <Stack direction="row" alignItems="center" spacing={1}>
+        <StatusLogo variant={status} />
+        <IconButton size="small" onClick={onClick}>
+          <ActionsIcon color="primary" />
+        </IconButton>
+      </Stack>
+    </Paper>
+  );
+};
+
 export const ServiceCard: React.FC<ServiceCardProps> = (props) => {
-  const { variant, title, description, imageSrc, href } = props;
+  const {
+    variant,
+    title,
+    description,
+    imageSrc,
+    href,
+    status,
+    isActionsAvailable,
+    onActionsClick,
+  } = props;
 
   return (
     <PaperButton>
       <Stack
         component={NavLink}
         to={href}
-        sx={{ textDecoration: 'none', color: 'inherit' }}
+        sx={{ textDecoration: 'none', color: 'inherit', position: 'relative' }}
       >
         {variant === 'banner' && (
           <>
@@ -58,6 +94,9 @@ export const ServiceCard: React.FC<ServiceCardProps> = (props) => {
               <ServiceCardText title={title} description={description} />
             </Stack>
           </Stack>
+        )}
+        {isActionsAvailable && (
+          <ServiceSettingsButton onClick={onActionsClick} status={status} />
         )}
       </Stack>
     </PaperButton>

@@ -5,3 +5,4 @@ export * from './Paper';
 export * from './Tag';
 export * from './Logo';
 export * from './PaperButton';
+export * from './StatusLogo';

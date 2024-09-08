@@ -11,6 +11,9 @@ import {
   CreateServiceResponse,
   GetServicesResponse,
   GetServiceResponse,
+  UpdateServiceStatusPayload,
+  UpdateServiceStatusResponse,
+  GetServicesQuery,
 } from '@demo-A/api-types';
 
 class ClientApiBase {
@@ -90,11 +93,14 @@ export class ClientApi extends ClientApiBase {
     return data;
   }
 
-  static async getServices(): Promise<GetServicesResponse> {
+  static async getServices(
+    params: GetServicesQuery,
+  ): Promise<GetServicesResponse> {
     const { data } =
       await ClientApiInstance.axiosInstance.request<GetServicesResponse>({
         url: '/services',
         method: 'GET',
+        params,
       });
     return data;
   }
@@ -107,6 +113,20 @@ export class ClientApi extends ClientApiBase {
         url: `/services/${params.id}`,
         method: 'GET',
       });
+    return data;
+  }
+
+  static async updateServiceStatus(
+    payload: UpdateServiceStatusPayload,
+  ): Promise<UpdateServiceStatusResponse> {
+    const { data } =
+      await ClientApiInstance.axiosInstance.request<UpdateServiceStatusResponse>(
+        {
+          url: '/services/update-status',
+          method: 'POST',
+          data: payload,
+        },
+      );
     return data;
   }
 }

@@ -4,6 +4,7 @@ import {
   ServiceCardVariant,
   ServiceSupabaseImage,
   ServiceSupabaseImageEntity,
+  ServiceStatus,
 } from '@demo-A/api-types';
 
 import { TimestampEntity } from './base/timestamp.entity';
@@ -19,6 +20,13 @@ export class ServiceEntity extends TimestampEntity implements Service {
     default: 'default',
   })
   cardVariant!: ServiceCardVariant;
+
+  @Column({
+    type: 'enum',
+    enum: ['active', 'draft', 'archived', 'deleted'],
+    default: 'draft',
+  })
+  status!: ServiceStatus;
 
   @Column({ type: 'varchar' })
   title!: string;

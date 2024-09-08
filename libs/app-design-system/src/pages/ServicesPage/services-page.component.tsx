@@ -16,6 +16,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
     profileImageSrc,
     profileName,
     onCreateServiceClick,
+    isServiceSettingsAvailable,
+    onServiceSettingsClick,
   } = props;
 
   const bannerServiceCards = useMemo(
@@ -30,9 +32,14 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
             title={service.title}
             description={service.shortDescription}
             href={service.inAppPath}
+            status={service.status}
+            isActionsAvailable={isServiceSettingsAvailable}
+            onActionsClick={() =>
+              onServiceSettingsClick({ serviceId: service.id })
+            }
           />
         )),
-    [services],
+    [isServiceSettingsAvailable, onServiceSettingsClick, services],
   );
 
   const defaultServiceCards = useMemo(
@@ -47,9 +54,14 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
             title={service.title}
             description={service.shortDescription}
             href={service.inAppPath}
+            status={service.status}
+            isActionsAvailable={isServiceSettingsAvailable}
+            onActionsClick={() =>
+              onServiceSettingsClick({ serviceId: service.id })
+            }
           />
         )),
-    [services],
+    [isServiceSettingsAvailable, onServiceSettingsClick, services],
   );
 
   return (

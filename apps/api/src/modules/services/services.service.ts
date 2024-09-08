@@ -4,9 +4,15 @@ import {
   CreateServicePayload,
   CreateServiceResponse,
   GetServiceResponse,
+  GetServicesQuery,
   GetServicesResponse,
+  ServiceStatus,
+  UpdateServiceStatusPayload,
+  UpdateServiceStatusResponse,
+  User,
 } from '@demo-A/api-types';
 import { ClsService } from 'nestjs-cls';
+import { In } from 'typeorm';
 
 @Injectable()
 export class ServicesService {
@@ -39,9 +45,17 @@ export class ServicesService {
     }
   }
 
-  async getServices(): Promise<GetServicesResponse> {
+  async getServices(query: GetServicesQuery): Promise<GetServicesResponse> {
+    // region Handle status includes query
+    const user: User | null = this.cls.get('user');
+    let statusIncludes: ServiceStatus[] = ['active'];
+    if (query.statusIncludes?.length && user?.role === 'admin') {
+      statusIncludes = query.statusIncludes;
+    }
+    // endregion
+
     const services = await this.servicesRepository.getServices(
-      {},
+      { status: In(statusIncludes) },
       { relations: ['supabaseImage'] },
     );
     return { services };
@@ -55,5 +69,14 @@ export class ServicesService {
       { relations: ['supabaseImage'] },
     );
     return { service };
+  }
+
+  async updateServiceStatus(
+    payload: UpdateServiceStatusPayload,
+  ): Promise<UpdateServiceStatusResponse> {
+    await this.servicesRepository.updateServiceByServiceId(payload.id, {
+      status: payload.status,
+    });
+    return { success: true };
   }
 }

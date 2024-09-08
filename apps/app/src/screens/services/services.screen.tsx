@@ -1,23 +1,120 @@
 import React, { useCallback } from 'react';
-import { ServicesPage, useCreateServiceModal } from '@demo-A/app-design-system';
 import {
+  ServicesPage,
+  useConfirmationModal,
+  useCreateServiceModal,
+  useServiceSettingsModal,
+} from '@demo-A/app-design-system';
+import {
+  Service,
   useAuth,
   useCreateServiceMutation,
   useServicesQuery,
+  useUpdateServiceStatusMutation,
 } from '@demo-A/app-modules';
 import { Routes, Route } from 'react-router-dom';
 import { CreateServicePayload } from '@demo-A/api-types';
 import { uploadFileToStorage } from '@demo-A/utils';
+import { useSnackbar } from 'notistack';
 
 import { ServiceDetailsScreen } from '../service-details';
 
 export const ServicesScreen: React.FC = () => {
   const { profile } = useAuth();
+  const { open: openConfirmationModal } = useConfirmationModal();
   const { open: openCreateServiceModal } = useCreateServiceModal();
+  const { open: openServiceSettings, close: closeServiceSettings } =
+    useServiceSettingsModal();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const { services } = useServicesQuery();
-
+  const { services } = useServicesQuery({
+    statusIncludes: ['active', 'draft', 'archived'],
+  });
   const { createService } = useCreateServiceMutation();
+  const { updateServiceStatus } = useUpdateServiceStatusMutation();
+
+  // region Settings
+  const handleServiceDelete = useCallback(
+    async (service: Service) => {
+      const { confirmed } = await openConfirmationModal({
+        title: 'Are you sure?',
+        description:
+          'When service is deleted it will not longer be visible for you and clients.',
+      });
+      if (!confirmed) return;
+      await updateServiceStatus({ id: service.id, status: 'deleted' });
+      enqueueSnackbar('Service deleted!', { variant: 'warning' });
+      closeServiceSettings();
+    },
+    [
+      closeServiceSettings,
+      enqueueSnackbar,
+      openConfirmationModal,
+      updateServiceStatus,
+    ],
+  );
+
+  const handleServiceArchive = useCallback(
+    async (service: Service) => {
+      const { confirmed } = await openConfirmationModal({
+        title: 'Are you sure?',
+        description:
+          'When service is archived it will not longer be visible for clients.',
+      });
+      if (!confirmed) return;
+      await updateServiceStatus({ id: service.id, status: 'archived' });
+      enqueueSnackbar('Service archived!', { variant: 'warning' });
+      closeServiceSettings();
+    },
+    [
+      closeServiceSettings,
+      enqueueSnackbar,
+      openConfirmationModal,
+      updateServiceStatus,
+    ],
+  );
+
+  const handleServicePublish = useCallback(
+    async (service: Service) => {
+      const { confirmed } = await openConfirmationModal({
+        title: 'Are you sure?',
+        description:
+          'When service is published it will be visible for clients.',
+      });
+      if (!confirmed) return;
+      await updateServiceStatus({ id: service.id, status: 'active' });
+      enqueueSnackbar('Service published!', { variant: 'success' });
+      closeServiceSettings();
+    },
+    [
+      closeServiceSettings,
+      enqueueSnackbar,
+      openConfirmationModal,
+      updateServiceStatus,
+    ],
+  );
+
+  const handleServiceSettingsClick = useCallback(
+    (params: { serviceId: string }) => {
+      const service = services.find((s) => s.id === params.serviceId);
+      if (!service) return;
+      openServiceSettings({
+        serviceStatus: service.status,
+        serviceTitle: service.title,
+        onServiceDelete: () => handleServiceDelete(service),
+        onServiceArchive: () => handleServiceArchive(service),
+        onServicePublish: () => handleServicePublish(service),
+      });
+    },
+    [
+      handleServiceArchive,
+      handleServiceDelete,
+      handleServicePublish,
+      openServiceSettings,
+      services,
+    ],
+  );
+  // endregion
 
   const handleCreateServiceSubmit = useCallback(
     async (params: {
@@ -69,6 +166,8 @@ export const ServicesScreen: React.FC = () => {
           profileName={null}
           profileImageSrc={null}
           onCreateServiceClick={() => undefined}
+          isServiceSettingsAvailable={false}
+          onServiceSettingsClick={() => undefined}
         />
         <Routes>
           <Route
@@ -88,6 +187,8 @@ export const ServicesScreen: React.FC = () => {
         profileName={profile.fullName}
         profileImageSrc={profile.image}
         onCreateServiceClick={handleCreateServiceClick}
+        isServiceSettingsAvailable={profile.isEditModeEnabled}
+        onServiceSettingsClick={handleServiceSettingsClick}
       />
       <Routes>
         <Route path="/services/:serviceId" element={<ServiceDetailsScreen />} />

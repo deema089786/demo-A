@@ -6,6 +6,8 @@ import {
   UseGuards,
   UsePipes,
   Param,
+  Query,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   createServicePayloadSchema,
@@ -13,10 +15,14 @@ import {
   CreateServiceResponse,
   GetServicesResponse,
   GetServiceResponse,
+  getServicesQuerySchema,
+  updateServiceStatusPayloadSchema,
+  UpdateServiceStatusPayload,
+  UpdateServiceStatusResponse,
 } from '@demo-A/api-types';
 import { ZodValidationPipe } from '@demo-A/nest-utils';
 
-import { AuthJwtGuard } from '../auth/auth.jwt.strategy';
+import { AuthJwtGuard, AuthOptionalJwtGuard } from '../auth/auth.jwt.guard';
 import { ServicesService } from './services.service';
 import { AllowedRoles, RolesGuard } from '../auth/auth.role.guard';
 
@@ -25,8 +31,13 @@ export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Get()
-  getServices(): Promise<GetServicesResponse> {
-    return this.servicesService.getServices();
+  @UseGuards(AuthOptionalJwtGuard)
+  getServices(@Query() query: unknown): Promise<GetServicesResponse> {
+    const { data, success, error } = getServicesQuerySchema.safeParse(query);
+    if (!success) {
+      throw new BadRequestException(error.errors);
+    }
+    return this.servicesService.getServices(data);
   }
 
   @Get('/:serviceId')
@@ -45,5 +56,16 @@ export class ServicesController {
     @Body() payload: CreateServicePayload,
   ): Promise<CreateServiceResponse> {
     return this.servicesService.createService(payload);
+  }
+
+  @Post('/update-status')
+  @AllowedRoles('admin')
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthJwtGuard)
+  @UsePipes(new ZodValidationPipe(updateServiceStatusPayloadSchema))
+  updateServiceStatus(
+    @Body() payload: UpdateServiceStatusPayload,
+  ): Promise<UpdateServiceStatusResponse> {
+    return this.servicesService.updateServiceStatus(payload);
   }
 }

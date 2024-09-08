@@ -14,13 +14,12 @@ export const ConfirmationModalController: React.FC<ConfirmationModalProps> = (
     description,
     confirmButtonText = 'Confirm',
     cancelButtonText = 'Cancel',
-    cancelOnClickOutsideDisabled = false,
     onConfirm,
     onCancel,
     onClosed,
   } = props;
 
-  const { visible, hide, remove } = useModal();
+  const { visible, hide, remove, resolve } = useModal();
 
   const handleExited = useCallback(() => {
     onClosed?.();
@@ -28,21 +27,20 @@ export const ConfirmationModalController: React.FC<ConfirmationModalProps> = (
   }, [remove, onClosed]);
 
   const handleConfirm = useCallback(() => {
-    onConfirm();
-    hide().catch(console.error);
-  }, [hide, onConfirm]);
+    console.log('res');
+    onConfirm?.();
+    resolve({ confirmed: true });
+    hide();
+  }, [onConfirm, resolve, hide]);
 
   const handleCancel = useCallback(() => {
     onCancel?.();
-    hide().catch(console.error);
-  }, [hide, onCancel]);
+    resolve({ confirmed: false });
+    hide();
+  }, [onCancel, resolve, hide]);
 
   return (
-    <ModalDrawer
-      open={visible}
-      onClose={cancelOnClickOutsideDisabled ? undefined : handleCancel}
-      onExited={handleExited}
-    >
+    <ModalDrawer open={visible} onClose={handleCancel} onExited={handleExited}>
       <Stack spacing={3} p={3} pt={4}>
         <Stack>
           <Typography variant="h5" component="h1">

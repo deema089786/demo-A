@@ -24,7 +24,7 @@ import {
 } from '@demo-A/api-types';
 import { ZodValidationPipe } from '@demo-A/nest-utils';
 
-import { AuthJwtGuard } from './auth.jwt.strategy';
+import { AuthJwtGuard } from './auth.jwt.guard';
 import { AuthService } from './auth.service';
 
 @Controller('auth')

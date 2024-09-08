@@ -121,15 +121,13 @@ export class AuthService {
     const user = await this.usersRepository.getUserBy({
       email: payload.username,
     });
-    if (!user) {
+
+    if (!user || !user.password) {
       throw new Error('User not found or password incorrect #1');
     }
-    // if (!user || !user.password) {
-    //   throw new Error('User not found or password incorrect #1');
-    // }
-    // if (!(await bcrypt.compare(payload.password, user.password))) {
-    //   throw new Error('User not found or password incorrect #2');
-    // }
+    if (!(await bcrypt.compare(payload.password, user.password))) {
+      throw new Error('User not found or password incorrect #2');
+    }
 
     const tokens = await this.generateAuthTokens({ userId: user.id });
     return {

@@ -4,10 +4,12 @@ import { Timestamp } from '../base';
 import { ServiceSupabaseImage } from './service-supabase-image';
 
 export type ServiceCardVariant = 'banner' | 'default';
+export type ServiceStatus = 'active' | 'draft' | 'archived' | 'deleted';
 
 export interface Service extends Timestamp {
   id: string;
   cardVariant: ServiceCardVariant;
+  status: ServiceStatus;
 
   title: string;
   shortDescription: string;
@@ -39,6 +41,10 @@ export type CreateServiceResponse = {
 // endregion
 
 // region Get Service
+export const getServicesQuerySchema = z.object({
+  statusIncludes: z.enum(['active', 'draft', 'archived']).array().optional(),
+});
+export type GetServicesQuery = z.infer<typeof getServicesQuerySchema>;
 export type GetServicesResponse = {
   services: Service[];
 };
@@ -47,3 +53,15 @@ export type GetServiceResponse = {
   service: Service | null;
 };
 //
+
+// region Update Service Status
+export const updateServiceStatusPayloadSchema = z.object({
+  id: z.string(),
+  status: z.enum(['active', 'draft', 'archived', 'deleted']),
+});
+
+export type UpdateServiceStatusPayload = z.infer<
+  typeof updateServiceStatusPayloadSchema
+>;
+export type UpdateServiceStatusResponse = { success: boolean };
+// endregion

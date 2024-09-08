@@ -1,0 +1,11 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as StatusLogoStories from './status-logo.stories';
+
+<Meta of={StatusLogoStories} />
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+  <Story of={StatusLogoStories.Active} />
+  <Story of={StatusLogoStories.Archived} />
+  <Story of={StatusLogoStories.Draft} />
+  <Story of={StatusLogoStories.Deleted} />
+</div>

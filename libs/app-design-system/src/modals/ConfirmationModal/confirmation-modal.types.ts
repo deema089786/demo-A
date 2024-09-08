@@ -4,9 +4,12 @@ export type ConfirmationModalProps = {
 
   confirmButtonText?: string;
   cancelButtonText?: string;
-  cancelOnClickOutsideDisabled?: boolean;
 
-  onConfirm(): void;
+  onConfirm?(): void;
   onCancel?(): void;
   onClosed?(): void;
+};
+
+export type ConfirmationModalResolves = {
+  confirmed: boolean;
 };

@@ -7,4 +7,6 @@ export type ServicesPageProps = {
   profileName: string | null;
   profileImageSrc: string | null;
   onCreateServiceClick(variant: 'banner' | 'default'): void;
+  isServiceSettingsAvailable: boolean;
+  onServiceSettingsClick: (params: { serviceId: string }) => void;
 };
