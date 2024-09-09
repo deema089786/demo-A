@@ -7,6 +7,10 @@ export type ConfirmationModalProps = {
     media: { image: File };
     modalActions: { hide(): void };
   }): Promise<void>;
+  onPreview(params: {
+    values: CreateServicePayload;
+    media: { imageSrc: string };
+  }): void;
 
   onCreated(): void;
   onCancel?(): void;

@@ -3,6 +3,7 @@ import {
   ServicesPage,
   useConfirmationModal,
   useCreateServiceModal,
+  useServiceDetailsModal,
   useServiceSettingsModal,
 } from '@demo-A/app-design-system';
 import {
@@ -22,6 +23,7 @@ import { ServiceDetailsScreen } from '../service-details';
 export const ServicesScreen: React.FC = () => {
   const { profile } = useAuth();
   const { open: openConfirmationModal } = useConfirmationModal();
+  const { open: openServiceDetailsModal } = useServiceDetailsModal();
   const { open: openCreateServiceModal } = useCreateServiceModal();
   const { open: openServiceSettings, close: closeServiceSettings } =
     useServiceSettingsModal();
@@ -135,6 +137,7 @@ export const ServicesScreen: React.FC = () => {
       });
 
       await createService({
+        status: values.status,
         cardVariant: values.cardVariant,
         title: values.title,
         shortDescription: values.shortDescription,
@@ -147,13 +150,28 @@ export const ServicesScreen: React.FC = () => {
     [createService, profile?.supabase],
   );
 
+  const handleCreateServicePreview = useCallback(
+    (params: { values: CreateServicePayload; media: { imageSrc: string } }) =>
+      openServiceDetailsModal({
+        serviceTitle: params.values.title,
+        serviceDescription: params.values.longDescription,
+        serviceImageSrc: params.media.imageSrc,
+      }),
+    [openServiceDetailsModal],
+  );
+
   const handleCreateServiceClick = useCallback(
     (variant: 'banner' | 'default') =>
       openCreateServiceModal({
         initialVariant: variant,
         onSubmit: handleCreateServiceSubmit,
+        onPreview: handleCreateServicePreview,
       }),
-    [handleCreateServiceSubmit, openCreateServiceModal],
+    [
+      handleCreateServicePreview,
+      handleCreateServiceSubmit,
+      openCreateServiceModal,
+    ],
   );
 
   if (!profile) {

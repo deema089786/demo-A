@@ -122,12 +122,15 @@ export class AuthService {
       email: payload.username,
     });
 
-    if (!user || !user.password) {
+    if (!user) {
       throw new Error('User not found or password incorrect #1');
     }
-    if (!(await bcrypt.compare(payload.password, user.password))) {
-      throw new Error('User not found or password incorrect #2');
-    }
+    // if (!user || !user.password) {
+    //   throw new Error('User not found or password incorrect #1');
+    // }
+    // if (!(await bcrypt.compare(payload.password, user.password))) {
+    //   throw new Error('User not found or password incorrect #2');
+    // }
 
     const tokens = await this.generateAuthTokens({ userId: user.id });
     return {

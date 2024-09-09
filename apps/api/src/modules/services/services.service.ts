@@ -26,6 +26,7 @@ export class ServicesService {
   ): Promise<CreateServiceResponse> {
     try {
       const service = await this.servicesRepository.createService({
+        status: payload.status,
         cardVariant: payload.cardVariant,
         title: payload.title,
         shortDescription: payload.shortDescription,

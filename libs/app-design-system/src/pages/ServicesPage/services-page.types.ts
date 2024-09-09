@@ -1,4 +1,5 @@
 import { Service } from '@demo-A/app-modules';
+import { CreateServicePayload } from '@demo-A/api-types';
 
 export type ServicesPageProps = {
   services: Service[];
@@ -8,5 +9,5 @@ export type ServicesPageProps = {
   profileImageSrc: string | null;
   onCreateServiceClick(variant: 'banner' | 'default'): void;
   isServiceSettingsAvailable: boolean;
-  onServiceSettingsClick: (params: { serviceId: string }) => void;
+  onServiceSettingsClick(params: { serviceId: string }): void;
 };

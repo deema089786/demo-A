@@ -16,12 +16,8 @@ type Story = StoryObj<typeof ServiceDetailsPage>;
 
 export const Default: Story = {
   args: {
-    service: {
-      id: '1',
-      variant: 'banner',
-      title: 'Sea Food',
-      description: 'Food service with delivering fresh sea food',
-      imageSrc: '/images/service-card-banner-image.jpg',
-    },
+    serviceTitle: 'Sea Food',
+    serviceDescription: 'Food service with delivering fresh sea food',
+    serviceImageSrc: '/images/service-card-banner-image.jpg',
   },
 };

@@ -1,6 +1,6 @@
-export type ServiceDetailsPageProps = {
+export type ServiceDetailsModalProps = {
   serviceTitle: string;
   serviceDescription: string;
   serviceImageSrc: string;
-  onExited?(): void;
+  onClosed?(): void;
 };

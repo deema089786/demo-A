@@ -20,6 +20,7 @@ export interface Service extends Timestamp {
 
 // region Create Service
 export const createServicePayloadSchema = z.object({
+  status: z.enum(['active', 'draft', 'archived']),
   cardVariant: z.enum(['banner', 'default']),
   title: z.string(),
   shortDescription: z.string(),

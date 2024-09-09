@@ -62,6 +62,7 @@ export class ServicesRepository {
     payload: ServicesRepositoryCreateServicePayload,
   ): Promise<Service> {
     const service = new ServiceEntity();
+    service.status = payload.status;
     service.cardVariant = payload.cardVariant;
     service.title = payload.title;
     service.shortDescription = payload.shortDescription;

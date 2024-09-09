@@ -1,6 +1,7 @@
 import { ServiceCardVariant, ServiceStatus } from '@demo-A/api-types';
 
 export interface ServicesRepositoryCreateServicePayload {
+  status: ServiceStatus;
   cardVariant: ServiceCardVariant;
   title: string;
   shortDescription: string;

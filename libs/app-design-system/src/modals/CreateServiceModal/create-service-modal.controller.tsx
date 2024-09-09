@@ -1,5 +1,11 @@
-import React, { useCallback, useMemo } from 'react';
-import { Stack, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import React, { useCallback, useMemo, useState } from 'react';
+import {
+  Stack,
+  ToggleButtonGroup,
+  ToggleButton,
+  FormControlLabel,
+  Switch,
+} from '@mui/material';
 import { DriveFolderUpload as PublishIcon } from '@mui/icons-material';
 import { useModal } from '@ebay/nice-modal-react';
 import { useFileSelector, useFormik } from '@demo-A/utils';
@@ -20,10 +26,10 @@ import { getInitialValues } from './create-service-modal.constants';
 export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
   props,
 ) => {
-  const { open: openConfirmationModal } = useConfirmationModal();
-  const { initialVariant, onCancel, onClosed, onSubmit } = props;
-
   const { visible, hide, remove } = useModal();
+  const { open: openConfirmationModal } = useConfirmationModal();
+  const { initialVariant, onCancel, onClosed, onSubmit, onPreview } = props;
+  const [isSaveAsDraft, setIsSaveAsDraft] = useState(false);
 
   const handleExited = useCallback(() => {
     onClosed?.();
@@ -64,7 +70,10 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
     onSubmit: (values) => {
       if (!file) return;
       return onSubmit({
-        values,
+        values: {
+          ...values,
+          status: isSaveAsDraft ? 'draft' : 'active',
+        },
         media: { image: file },
         modalActions: { hide },
       });
@@ -132,6 +141,15 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
           />
         </Stack>
         <Stack spacing={2}>
+          <FormControlLabel
+            label="Save as Draft"
+            control={
+              <Switch
+                checked={isSaveAsDraft}
+                onChange={(e, value) => setIsSaveAsDraft(value)}
+              />
+            }
+          />
           <Button
             variant="contained"
             type="submit"
@@ -140,14 +158,17 @@ export const CreateServiceModalController: React.FC<ConfirmationModalProps> = (
             loading={isSubmitting}
             loadingPosition="start"
           >
-            Publish
+            {isSaveAsDraft ? 'Save as Draft' : 'Publish'}
           </Button>
           <Stack direction="row" spacing={1} justifyContent="space-between">
-            <Button fullWidth variant="outlined">
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() =>
+                onPreview({ values, media: { imageSrc: fileSrc || '' } })
+              }
+            >
               Preview
-            </Button>
-            <Button fullWidth variant="outlined">
-              Save Draft
             </Button>
             <Button
               fullWidth

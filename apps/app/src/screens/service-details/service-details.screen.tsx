@@ -16,22 +16,19 @@ export const ServiceDetailsScreen: React.FC = () => {
   if (!profile) {
     return (
       <ServiceDetailsPage
-        service={service}
-        isEditModeEnabled={false}
-        isAuthenticated={false}
-        profileName={null}
-        profileImageSrc={null}
+        serviceTitle={service.title}
+        serviceDescription={service.longDescription}
+        serviceImageSrc={service.imageSrc || ''}
         onExited={() => navigate('/', { replace: true })}
       />
     );
   }
+  // TODO handled Authenticated view
   return (
     <ServiceDetailsPage
-      isAuthenticated
-      service={service}
-      isEditModeEnabled={profile.isEditModeEnabled}
-      profileName={profile.fullName}
-      profileImageSrc={profile.image}
+      serviceTitle={service.title}
+      serviceDescription={service.longDescription}
+      serviceImageSrc={service.imageSrc || ''}
       onExited={() => navigate('/', { replace: true })}
     />
   );

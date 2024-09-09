@@ -1,1 +1,2 @@
-export { useServiceSettingsModal } from './service-settings-modal.hook';
+export { useServiceDetailsModal } from './service-details-modal.hook';
+export { ServiceDetailsModalView } from './service-details-modal.view';
