@@ -28,7 +28,7 @@ export const ScreenLayout: React.FC<PropsWithChildren<ScreenLayoutProps>> = (
         profileImageSrc={profileImageSrc}
         profileName={profileName}
       />
-      <Container maxWidth="xl" disableGutters sx={{ flex: 1 }}>
+      <Container maxWidth="sm" disableGutters sx={{ flex: 1 }}>
         <Stack spacing={2}>{children}</Stack>
       </Container>
       <ScreenFooter />

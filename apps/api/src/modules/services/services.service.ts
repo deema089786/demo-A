@@ -13,12 +13,17 @@ import {
 } from '@demo-A/api-types';
 import { ClsService } from 'nestjs-cls';
 import { In } from 'typeorm';
+import { ConfigService } from '@demo-A/nest-modules';
+import { createClient } from '@supabase/supabase-js';
+
+import { Config } from '../../config';
 
 @Injectable()
 export class ServicesService {
   constructor(
     private servicesRepository: ServicesRepository,
     private cls: ClsService,
+    private configService: ConfigService<Config>,
   ) {}
 
   async createService(
@@ -75,9 +80,21 @@ export class ServicesService {
   async updateServiceStatus(
     payload: UpdateServiceStatusPayload,
   ): Promise<UpdateServiceStatusResponse> {
+    const service = await this.servicesRepository.getServiceById(payload.id, {
+      relations: ['supabaseImage'],
+    });
+    if (!service) throw new Error('Service not found');
     await this.servicesRepository.updateServiceByServiceId(payload.id, {
       status: payload.status,
     });
+    if (service.supabaseImage) {
+      const supabase = this.configService.getBy('supabase');
+      const supabaseClient = createClient(supabase.projectUrl, supabase.apiKey);
+      const { error } = await supabaseClient.storage
+        .from(supabase.serviceImagesBucketName)
+        .remove([service.supabaseImage.path]);
+      if (error) console.error(error);
+    }
     return { success: true };
   }
 }

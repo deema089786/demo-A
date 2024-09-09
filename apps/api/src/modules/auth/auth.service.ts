@@ -61,7 +61,11 @@ export class AuthService {
       isPasswordCreated: Boolean(user.password),
       role: user.role,
       supabase: ['admin'].includes(user.role)
-        ? { projectUrl: supabase.projectUrl, apiKey: supabase.apiKey }
+        ? {
+            projectUrl: supabase.projectUrl,
+            apiKey: supabase.apiKey,
+            serviceImagesBucketName: supabase.serviceImagesBucketName,
+          }
         : null,
     };
   }

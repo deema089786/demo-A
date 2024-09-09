@@ -68,5 +68,11 @@ export const configSchema: Schema<Config> = {
       env: 'SUPABASE_API_KEY',
       default: null,
     },
+    serviceImagesBucketName: {
+      doc: '',
+      format: String,
+      env: 'SUPABASE_SERVICE_IMAGES_BUCKET_NAME',
+      default: null,
+    },
   },
 };

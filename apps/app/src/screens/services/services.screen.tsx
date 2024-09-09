@@ -129,7 +129,7 @@ export const ServicesScreen: React.FC = () => {
 
       const { id, publicUrl, path, fullPath } = await uploadFileToStorage({
         file: media.image,
-        bucket: 'demo-a-service-images',
+        bucket: profile.supabase.serviceImagesBucketName,
         auth: {
           projectUrl: profile.supabase.projectUrl,
           apiKey: profile.supabase.apiKey,

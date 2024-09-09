@@ -75,6 +75,10 @@ export interface AuthProfileResponse {
   image: string | null;
   isPasswordCreated: boolean;
   role: UserRole;
-  supabase: { projectUrl: string; apiKey: string } | null;
+  supabase: {
+    projectUrl: string;
+    apiKey: string;
+    serviceImagesBucketName: string;
+  } | null;
 }
 // endregion

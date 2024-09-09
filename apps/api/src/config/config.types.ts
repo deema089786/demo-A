@@ -15,6 +15,7 @@ export interface ConfigGoogle {
 export interface Supabase {
   projectUrl: string;
   apiKey: string;
+  serviceImagesBucketName: string;
 }
 
 export interface Config {

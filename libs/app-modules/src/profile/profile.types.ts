@@ -7,5 +7,9 @@ export type Profile = {
   fullName: string | null;
   isPasswordCreated: boolean;
   isEditModeEnabled: boolean;
-  supabase: { projectUrl: string; apiKey: string } | null;
+  supabase: {
+    projectUrl: string;
+    apiKey: string;
+    serviceImagesBucketName: string;
+  } | null;
 };

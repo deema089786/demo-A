@@ -1,5 +1,13 @@
 import React, { ReactNode, useCallback } from 'react';
-import { Box, Slide, Backdrop, Portal, styled, alpha } from '@mui/material';
+import {
+  Box,
+  Slide,
+  Backdrop,
+  Portal,
+  Container,
+  styled,
+  alpha,
+} from '@mui/material';
 
 const ANIMATION_TIMEOUT = 300;
 
@@ -57,7 +65,7 @@ export const ModalDrawer: React.FC<ModalDrawerProps> = (props) => {
           timeout={ANIMATION_TIMEOUT}
           unmountOnExit
         >
-          <Box
+          <Container
             sx={{
               overflow: 'auto',
               overscrollBehavior: 'contain',
@@ -69,7 +77,7 @@ export const ModalDrawer: React.FC<ModalDrawerProps> = (props) => {
             role="button"
           >
             <ModalPaper sx={{ minHeight: 100 }}>{children}</ModalPaper>
-          </Box>
+          </Container>
         </Slide>
       </Backdrop>
     </Portal>
