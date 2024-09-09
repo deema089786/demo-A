@@ -80,13 +80,26 @@ export class ServicesService {
   async updateServiceStatus(
     payload: UpdateServiceStatusPayload,
   ): Promise<UpdateServiceStatusResponse> {
-    const service = await this.servicesRepository.getServiceById(payload.id, {
-      relations: ['supabaseImage'],
-    });
-    if (!service) throw new Error('Service not found');
     await this.servicesRepository.updateServiceByServiceId(payload.id, {
       status: payload.status,
     });
+
+    if (payload.status === 'deleted') {
+      await this.handleServiceDeleted({ serviceId: payload.id });
+    }
+
+    return { success: true };
+  }
+
+  private async handleServiceDeleted(params: { serviceId: string }) {
+    const service = await this.servicesRepository.getServiceById(
+      params.serviceId,
+      {
+        relations: ['supabaseImage'],
+      },
+    );
+    if (!service) throw new Error('Service not found');
+
     if (service.supabaseImage) {
       const supabase = this.configService.getBy('supabase');
       const supabaseClient = createClient(supabase.projectUrl, supabase.apiKey);
@@ -95,6 +108,5 @@ export class ServicesService {
         .remove([service.supabaseImage.path]);
       if (error) console.error(error);
     }
-    return { success: true };
   }
 }
