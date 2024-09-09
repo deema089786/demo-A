@@ -122,6 +122,7 @@ export class AuthService {
       email: payload.username,
     });
 
+    // TODO
     if (!user) {
       throw new Error('User not found or password incorrect #1');
     }
