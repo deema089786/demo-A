@@ -11,7 +11,7 @@ const HEIGHT = '140px';
 // Memo user because of src prop
 // src can be large Base64 string which take a long time to re-render
 export const ImageSelector: React.FC<ImageSelectorProps> = memo((props) => {
-  const { src, onClearClick, onSelectClick } = props;
+  const { src, defaultSrc, onClearClick, onSelectClick } = props;
 
   return (
     <Paper
@@ -20,7 +20,8 @@ export const ImageSelector: React.FC<ImageSelectorProps> = memo((props) => {
         display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
-        backgroundImage: src ? `url(${src})` : undefined,
+        backgroundImage:
+          src || defaultSrc ? `url(${src || defaultSrc})` : undefined,
         backgroundSize: 'cover',
         height: HEIGHT,
       }}

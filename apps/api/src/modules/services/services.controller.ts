@@ -19,6 +19,9 @@ import {
   updateServiceStatusPayloadSchema,
   UpdateServiceStatusPayload,
   UpdateServiceStatusResponse,
+  updateServicePayloadSchema,
+  UpdateServicePayload,
+  UpdateServiceResponse,
 } from '@demo-A/api-types';
 import { ZodValidationPipe } from '@demo-A/nest-utils';
 
@@ -67,5 +70,16 @@ export class ServicesController {
     @Body() payload: UpdateServiceStatusPayload,
   ): Promise<UpdateServiceStatusResponse> {
     return this.servicesService.updateServiceStatus(payload);
+  }
+
+  @Post('/update')
+  @AllowedRoles('admin')
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthJwtGuard)
+  @UsePipes(new ZodValidationPipe(updateServicePayloadSchema))
+  updateService(
+    @Body() payload: UpdateServicePayload,
+  ): Promise<UpdateServiceResponse> {
+    return this.servicesService.updateService(payload);
   }
 }

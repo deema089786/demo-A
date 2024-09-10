@@ -20,7 +20,7 @@ export interface ServicesRepositoryUpdateServicePayload {
   title?: string;
   shortDescription?: string;
   longDescription?: string;
-  supabaseImage?: {
+  newSupabaseImage?: {
     id: string;
     publicUrl: string;
     path: string;

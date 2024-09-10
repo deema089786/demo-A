@@ -2,7 +2,7 @@ import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import {
   Service,
   ServiceCardVariant,
-  ServiceSupabaseImage,
+  TestServiceSupabaseImage,
   ServiceSupabaseImageEntity,
   ServiceStatus,
 } from '@demo-A/api-types';
@@ -47,5 +47,5 @@ export class ServiceEntity extends TimestampEntity implements Service {
     () => ServiceSupabaseImageEntity,
     (serviceSupabaseImageEntity) => serviceSupabaseImageEntity.service,
   )
-  supabaseImage!: ServiceSupabaseImage | null;
+  supabaseImage!: TestServiceSupabaseImage | null;
 }

@@ -1,14 +1,14 @@
 import { v4 as uuid } from 'uuid';
 import { createClient } from '@supabase/supabase-js';
 
-type UploadFileToStorageParams = {
+export type UploadFileToStorageParams = {
   file: File;
   bucket: string;
   fileName?: string;
   auth: { projectUrl: string; apiKey: string };
 };
 
-type UploadFileToStorageParamsResult = {
+export type UploadFileToStorageParamsResult = {
   id: string;
   publicUrl: string;
   path: string;
@@ -44,4 +44,26 @@ export const uploadFileToStorage = async (
     path: data.path,
     fullPath: data.fullPath,
   };
+};
+
+export type DeleteFileFromStorageParams = {
+  bucket: string;
+  path: string;
+  auth: { projectUrl: string; apiKey: string };
+};
+
+export const deleteFileFromStorage = async (
+  params: DeleteFileFromStorageParams,
+) => {
+  const supabaseClient = createClient(
+    params.auth.projectUrl,
+    params.auth.apiKey,
+  );
+
+  const { data, error } = await supabaseClient.storage
+    .from(params.bucket)
+    .remove([params.path]);
+
+  if (error) throw error;
+  return data;
 };

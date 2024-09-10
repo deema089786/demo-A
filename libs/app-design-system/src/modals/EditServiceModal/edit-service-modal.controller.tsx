@@ -1,43 +1,29 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import {
-  Stack,
-  ToggleButtonGroup,
-  ToggleButton,
-  FormControlLabel,
-  Switch,
-} from '@mui/material';
+import React, { useCallback, useMemo } from 'react';
+import { Stack, ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { DriveFolderUpload as PublishIcon } from '@mui/icons-material';
 import { useModal } from '@ebay/nice-modal-react';
 import { useFileSelector, useFormik } from '@demo-A/utils';
 import {
-  CreateServicePayload,
-  createServicePayloadSchema,
+  UpdateServicePayload,
+  updateServicePayloadSchema,
 } from '@demo-A/api-types';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { ImageSelector } from '../../molecules';
 import { Button, Typography, Paper } from '../../atoms';
 import { TextField } from '../../inputs';
-import { CreateModalProps } from './create-service-modal.types';
+import { EditModalProps } from './edit-service-modal.types';
 import { ModalDrawer } from '../components';
-import { getInitialValues } from './create-service-modal.constants';
 
-export const CreateServiceModalController: React.FC<CreateModalProps> = (
-  props,
-) => {
+export const EditServiceModalController: React.FC<EditModalProps> = (props) => {
   const { visible, remove } = useModal();
-  const { initialVariant, onCancel, onClosed, onSubmit, onPreview } = props;
-  const [isSaveAsDraft, setIsSaveAsDraft] = useState(false);
+  const { initialValues, imageSrc, onCancel, onClosed, onSubmit } = props;
 
   const handleExited = useCallback(() => {
     onClosed?.();
     remove();
   }, [remove, onClosed]);
 
-  const initialValues = useMemo(
-    () => getInitialValues({ variant: initialVariant }),
-    [initialVariant],
-  );
   const {
     file,
     fileSrc,
@@ -51,19 +37,14 @@ export const CreateServiceModalController: React.FC<CreateModalProps> = (
     handleSubmit,
     isSubmitAvailable,
     isSubmitting,
-  } = useFormik<CreateServicePayload>({
+  } = useFormik<UpdateServicePayload>({
     initialValues,
-    validationSchema: toFormikValidationSchema(createServicePayloadSchema),
-    onSubmit: (values) => {
-      if (!file) return;
-      return onSubmit({
-        values: {
-          ...values,
-          status: isSaveAsDraft ? 'draft' : 'active',
-        },
+    validationSchema: toFormikValidationSchema(updateServicePayloadSchema),
+    onSubmit: (values) =>
+      onSubmit({
+        values,
         media: { image: file },
-      });
-    },
+      }),
   });
 
   return (
@@ -103,6 +84,7 @@ export const CreateServiceModalController: React.FC<CreateModalProps> = (
         </Stack>
         <ImageSelector
           src={fileSrc}
+          defaultSrc={imageSrc}
           onClearClick={clearFile}
           onSelectClick={selectFile}
         />
@@ -127,15 +109,6 @@ export const CreateServiceModalController: React.FC<CreateModalProps> = (
           />
         </Stack>
         <Stack spacing={2}>
-          <FormControlLabel
-            label="Save as Draft"
-            control={
-              <Switch
-                checked={isSaveAsDraft}
-                onChange={(e, value) => setIsSaveAsDraft(value)}
-              />
-            }
-          />
           <Button
             variant="contained"
             type="submit"
@@ -144,27 +117,11 @@ export const CreateServiceModalController: React.FC<CreateModalProps> = (
             loading={isSubmitting}
             loadingPosition="start"
           >
-            {isSaveAsDraft ? 'Save as Draft' : 'Publish'}
+            Save Changes
           </Button>
-          <Stack direction="row" spacing={1} justifyContent="space-between">
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() =>
-                onPreview({ values, media: { imageSrc: fileSrc || '' } })
-              }
-            >
-              Preview
-            </Button>
-            <Button
-              fullWidth
-              color="secondary"
-              variant="outlined"
-              onClick={onCancel}
-            >
-              Cancel
-            </Button>
-          </Stack>
+          <Button fullWidth variant="outlined" onClick={onCancel}>
+            Cancel
+          </Button>
         </Stack>
       </Stack>
     </ModalDrawer>

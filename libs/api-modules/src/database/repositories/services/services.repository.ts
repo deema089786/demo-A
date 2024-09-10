@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   Service,
   ServiceEntity,
-  ServiceSupabaseImage,
   ServiceSupabaseImageEntity,
 } from '@demo-A/api-types';
 import { Repository } from 'typeorm';
@@ -91,8 +90,22 @@ export class ServicesRepository {
       relations: ['supabaseImage'],
     });
     if (!service) throw new Error('Service not found');
-    const { supabaseImage, ...rest } = payload;
-    // TODO handle updating supabaseImage
+    const { newSupabaseImage, ...rest } = payload;
+
     await this.servicesRepository.update({ id: service.id }, rest);
+
+    if (payload.newSupabaseImage) {
+      const serviceSupabaseImage = new ServiceSupabaseImageEntity();
+      serviceSupabaseImage.serviceId = service.id;
+      serviceSupabaseImage.supabaseId = payload.newSupabaseImage.id;
+      serviceSupabaseImage.publicUrl = payload.newSupabaseImage.publicUrl;
+      serviceSupabaseImage.path = payload.newSupabaseImage.path;
+      serviceSupabaseImage.fullPath = payload.newSupabaseImage.fullPath;
+      await this.serviceSupabaseImagesRepository.save(serviceSupabaseImage);
+    }
+  }
+
+  async deleteServiceSupabaseImageByServiceId(serviceId: string) {
+    await this.serviceSupabaseImagesRepository.delete({ serviceId });
   }
 }

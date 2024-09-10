@@ -66,6 +66,7 @@ export const ModalDrawer: React.FC<ModalDrawerProps> = (props) => {
           unmountOnExit
         >
           <Container
+            disableGutters
             sx={{
               overflow: 'auto',
               overscrollBehavior: 'contain',

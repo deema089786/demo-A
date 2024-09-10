@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Service, ServiceSupabaseImage } from '@demo-A/api-types';
+import { Service, TestServiceSupabaseImage } from '@demo-A/api-types';
 
 import { TimestampEntity } from './base/timestamp.entity';
 import { ServiceEntity } from './service.entity';
@@ -13,7 +13,7 @@ import { ServiceEntity } from './service.entity';
 @Entity()
 export class ServiceSupabaseImageEntity
   extends TimestampEntity
-  implements ServiceSupabaseImage
+  implements TestServiceSupabaseImage
 {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

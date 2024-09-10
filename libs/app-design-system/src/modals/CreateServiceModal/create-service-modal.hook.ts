@@ -6,6 +6,6 @@ import { CreateServiceModalController } from './create-service-modal.controller'
 const CreateServiceModal = NiceModal.create(CreateServiceModalController);
 
 export const useCreateServiceModal = () => {
-  const { show } = useModal(CreateServiceModal);
-  return useMemo(() => ({ open: show }), [show]);
+  const { show, hide } = useModal(CreateServiceModal);
+  return useMemo(() => ({ open: show, close: hide }), [show, hide]);
 };

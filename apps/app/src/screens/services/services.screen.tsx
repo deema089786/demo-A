@@ -3,6 +3,7 @@ import {
   ServicesPage,
   useConfirmationModal,
   useCreateServiceModal,
+  useEditServiceModal,
   useServiceDetailsModal,
   useServiceSettingsModal,
 } from '@demo-A/app-design-system';
@@ -12,10 +13,14 @@ import {
   useCreateServiceMutation,
   useServicesQuery,
   useUpdateServiceStatusMutation,
+  useUpdateServiceMutation,
 } from '@demo-A/app-modules';
 import { Routes, Route } from 'react-router-dom';
-import { CreateServicePayload } from '@demo-A/api-types';
-import { uploadFileToStorage } from '@demo-A/utils';
+import { CreateServicePayload, UpdateServicePayload } from '@demo-A/api-types';
+import {
+  uploadFileToStorage,
+  UploadFileToStorageParamsResult,
+} from '@demo-A/utils';
 import { useSnackbar } from 'notistack';
 
 import { ServiceDetailsScreen } from '../service-details';
@@ -24,9 +29,12 @@ export const ServicesScreen: React.FC = () => {
   const { profile } = useAuth();
   const { open: openConfirmationModal } = useConfirmationModal();
   const { open: openServiceDetailsModal } = useServiceDetailsModal();
-  const { open: openCreateServiceModal } = useCreateServiceModal();
-  const { open: openServiceSettings, close: closeServiceSettings } =
+  const { open: openCreateServiceModal, close: closeCreateServiceModal } =
+    useCreateServiceModal();
+  const { open: openServiceSettings, close: closeServiceSettingsModal } =
     useServiceSettingsModal();
+  const { open: openEditServiceModal, close: closeEditeServiceModal } =
+    useEditServiceModal();
   const { enqueueSnackbar } = useSnackbar();
 
   const { services } = useServicesQuery({
@@ -34,8 +42,79 @@ export const ServicesScreen: React.FC = () => {
   });
   const { createService } = useCreateServiceMutation();
   const { updateServiceStatus } = useUpdateServiceStatusMutation();
+  const { updateService } = useUpdateServiceMutation();
 
-  // region Settings
+  // region Service Settings/Editing
+  const handleEditServiceSubmit = useCallback(
+    async (params: {
+      values: UpdateServicePayload;
+      media: { image: File | null };
+    }) => {
+      const { values, media } = params;
+      if (!profile?.supabase) return;
+
+      let supabaseImage: UploadFileToStorageParamsResult | null = null;
+      if (media.image) {
+        supabaseImage = await uploadFileToStorage({
+          file: media.image,
+          bucket: profile.supabase.serviceImagesBucketName,
+          auth: {
+            projectUrl: profile.supabase.projectUrl,
+            apiKey: profile.supabase.apiKey,
+          },
+        });
+      }
+
+      await updateService({
+        id: values.id,
+        status: values.status,
+        cardVariant: values.cardVariant,
+        title: values.title,
+        shortDescription: values.shortDescription,
+        longDescription: values.longDescription,
+        newSupabaseImage: supabaseImage
+          ? {
+              id: supabaseImage.id,
+              publicUrl: supabaseImage.publicUrl,
+              path: supabaseImage.path,
+              fullPath: supabaseImage.fullPath,
+            }
+          : null,
+      });
+
+      closeEditeServiceModal();
+      closeServiceSettingsModal();
+    },
+    [
+      profile?.supabase,
+      updateService,
+      closeEditeServiceModal,
+      closeServiceSettingsModal,
+    ],
+  );
+
+  const handleEditServiceClick = useCallback(
+    (service: Service) => {
+      if (!service) return;
+      const initialValues: UpdateServicePayload = {
+        id: service.id,
+        status: service.status,
+        cardVariant: service.variant,
+        title: service.title,
+        shortDescription: service.shortDescription,
+        longDescription: service.longDescription,
+        newSupabaseImage: null,
+      };
+      openEditServiceModal({
+        initialValues,
+        imageSrc: service.imageSrc,
+        onSubmit: handleEditServiceSubmit,
+        onCancel: closeEditeServiceModal,
+      });
+    },
+    [closeEditeServiceModal, handleEditServiceSubmit, openEditServiceModal],
+  );
+
   const handleServiceDelete = useCallback(
     async (service: Service) => {
       const { confirmed } = await openConfirmationModal({
@@ -46,10 +125,10 @@ export const ServicesScreen: React.FC = () => {
       if (!confirmed) return;
       await updateServiceStatus({ id: service.id, status: 'deleted' });
       enqueueSnackbar('Service deleted!', { variant: 'warning' });
-      closeServiceSettings();
+      closeServiceSettingsModal();
     },
     [
-      closeServiceSettings,
+      closeServiceSettingsModal,
       enqueueSnackbar,
       openConfirmationModal,
       updateServiceStatus,
@@ -66,10 +145,10 @@ export const ServicesScreen: React.FC = () => {
       if (!confirmed) return;
       await updateServiceStatus({ id: service.id, status: 'archived' });
       enqueueSnackbar('Service archived!', { variant: 'warning' });
-      closeServiceSettings();
+      closeServiceSettingsModal();
     },
     [
-      closeServiceSettings,
+      closeServiceSettingsModal,
       enqueueSnackbar,
       openConfirmationModal,
       updateServiceStatus,
@@ -86,10 +165,10 @@ export const ServicesScreen: React.FC = () => {
       if (!confirmed) return;
       await updateServiceStatus({ id: service.id, status: 'active' });
       enqueueSnackbar('Service published!', { variant: 'success' });
-      closeServiceSettings();
+      closeServiceSettingsModal();
     },
     [
-      closeServiceSettings,
+      closeServiceSettingsModal,
       enqueueSnackbar,
       openConfirmationModal,
       updateServiceStatus,
@@ -103,12 +182,14 @@ export const ServicesScreen: React.FC = () => {
       openServiceSettings({
         serviceStatus: service.status,
         serviceTitle: service.title,
+        onServiceEdit: () => handleEditServiceClick(service),
         onServiceDelete: () => handleServiceDelete(service),
         onServiceArchive: () => handleServiceArchive(service),
         onServicePublish: () => handleServicePublish(service),
       });
     },
     [
+      handleEditServiceClick,
       handleServiceArchive,
       handleServiceDelete,
       handleServicePublish,
@@ -118,13 +199,13 @@ export const ServicesScreen: React.FC = () => {
   );
   // endregion
 
+  // region Service Creation
   const handleCreateServiceSubmit = useCallback(
     async (params: {
       values: CreateServicePayload;
       media: { image: File };
-      modalActions: { hide(): void };
     }) => {
-      const { values, media, modalActions } = params;
+      const { values, media } = params;
       if (!profile?.supabase) return;
 
       const { id, publicUrl, path, fullPath } = await uploadFileToStorage({
@@ -145,9 +226,9 @@ export const ServicesScreen: React.FC = () => {
         supabaseImage: { id, publicUrl, path, fullPath },
       });
 
-      modalActions.hide();
+      closeCreateServiceModal();
     },
-    [createService, profile?.supabase],
+    [createService, profile?.supabase, closeCreateServiceModal],
   );
 
   const handleCreateServicePreview = useCallback(
@@ -160,19 +241,31 @@ export const ServicesScreen: React.FC = () => {
     [openServiceDetailsModal],
   );
 
+  const handleCreateServiceCancel = useCallback(async () => {
+    const { confirmed } = await openConfirmationModal({
+      title: 'Cancel creating new service?',
+      description: 'You can create new service any time later.',
+    });
+    if (!confirmed) return;
+    closeCreateServiceModal();
+  }, [closeCreateServiceModal, openConfirmationModal]);
+
   const handleCreateServiceClick = useCallback(
     (variant: 'banner' | 'default') =>
       openCreateServiceModal({
         initialVariant: variant,
         onSubmit: handleCreateServiceSubmit,
         onPreview: handleCreateServicePreview,
+        onCancel: handleCreateServiceCancel,
       }),
     [
+      handleCreateServiceCancel,
       handleCreateServicePreview,
       handleCreateServiceSubmit,
       openCreateServiceModal,
     ],
   );
+  // endregion
 
   if (!profile) {
     return (

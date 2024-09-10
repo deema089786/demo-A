@@ -14,6 +14,8 @@ import {
   UpdateServiceStatusPayload,
   UpdateServiceStatusResponse,
   GetServicesQuery,
+  UpdateServicePayload,
+  UpdateServiceResponse,
 } from '@demo-A/api-types';
 
 class ClientApiBase {
@@ -127,6 +129,18 @@ export class ClientApi extends ClientApiBase {
           data: payload,
         },
       );
+    return data;
+  }
+
+  static async updateService(
+    payload: UpdateServicePayload,
+  ): Promise<UpdateServiceResponse> {
+    const { data } =
+      await ClientApiInstance.axiosInstance.request<UpdateServiceResponse>({
+        url: '/services/update',
+        method: 'POST',
+        data: payload,
+      });
     return data;
   }
 }

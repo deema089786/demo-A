@@ -7,6 +7,8 @@ import {
   GetServicesQuery,
   GetServicesResponse,
   ServiceStatus,
+  UpdateServicePayload,
+  UpdateServiceResponse,
   UpdateServiceStatusPayload,
   UpdateServiceStatusResponse,
   User,
@@ -15,6 +17,7 @@ import { ClsService } from 'nestjs-cls';
 import { In } from 'typeorm';
 import { ConfigService } from '@demo-A/nest-modules';
 import { createClient } from '@supabase/supabase-js';
+import { deleteFileFromStorage } from '@demo-A/utils';
 
 import { Config } from '../../config';
 
@@ -102,11 +105,57 @@ export class ServicesService {
 
     if (service.supabaseImage) {
       const supabase = this.configService.getBy('supabase');
-      const supabaseClient = createClient(supabase.projectUrl, supabase.apiKey);
-      const { error } = await supabaseClient.storage
-        .from(supabase.serviceImagesBucketName)
-        .remove([service.supabaseImage.path]);
-      if (error) console.error(error);
+      await deleteFileFromStorage({
+        bucket: supabase.serviceImagesBucketName,
+        path: service.supabaseImage.path,
+        auth: { projectUrl: supabase.projectUrl, apiKey: supabase.apiKey },
+      }).catch(console.error);
+    }
+  }
+
+  async updateService(
+    payload: UpdateServicePayload,
+  ): Promise<UpdateServiceResponse> {
+    try {
+      const service = await this.servicesRepository.getServiceById(payload.id, {
+        relations: ['supabaseImage'],
+      });
+      if (!service) throw new Error('Service not found');
+
+      if (payload.newSupabaseImage && service.supabaseImage) {
+        await this.servicesRepository.deleteServiceSupabaseImageByServiceId(
+          payload.id,
+        );
+        const supabase = this.configService.getBy('supabase');
+        await deleteFileFromStorage({
+          bucket: supabase.serviceImagesBucketName,
+          path: service.supabaseImage.path,
+          auth: { projectUrl: supabase.projectUrl, apiKey: supabase.apiKey },
+        }).catch(console.error);
+      }
+
+      await this.servicesRepository.updateServiceByServiceId(payload.id, {
+        status: payload.status,
+        cardVariant: payload.cardVariant,
+        title: payload.title,
+        shortDescription: payload.shortDescription,
+        longDescription: payload.longDescription,
+        newSupabaseImage: payload.newSupabaseImage
+          ? {
+              id: payload.newSupabaseImage.id,
+              publicUrl: payload.newSupabaseImage.publicUrl,
+              path: payload.newSupabaseImage.path,
+              fullPath: payload.newSupabaseImage.fullPath,
+            }
+          : null,
+      });
+      const updateService = await this.servicesRepository.getServiceById(
+        payload.id,
+        { relations: ['supabaseImage'] },
+      );
+      return { success: true, service: updateService };
+    } catch (e) {
+      return { success: false, service: null };
     }
   }
 }
