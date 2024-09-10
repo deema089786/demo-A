@@ -37,6 +37,7 @@ export const EditServiceModalController: React.FC<EditModalProps> = (props) => {
     handleSubmit,
     isSubmitAvailable,
     isSubmitting,
+    isDirty,
   } = useFormik<UpdateServicePayload>({
     initialValues,
     validationSchema: toFormikValidationSchema(updateServicePayloadSchema),
@@ -112,7 +113,7 @@ export const EditServiceModalController: React.FC<EditModalProps> = (props) => {
           <Button
             variant="contained"
             type="submit"
-            disabled={!isSubmitAvailable}
+            disabled={!isSubmitAvailable || (!isDirty && !file)}
             startIcon={<PublishIcon />}
             loading={isSubmitting}
             loadingPosition="start"

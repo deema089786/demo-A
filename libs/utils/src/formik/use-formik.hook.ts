@@ -31,6 +31,7 @@ export const useFormik = <Values extends FormikValues = FormikValues>(
     ...hook,
     errors,
     register,
+    isDirty: hook.dirty,
     isSubmitAvailable:
       (hook.isValid && hook.submitCount > 0) || hook.submitCount === 0,
   };
