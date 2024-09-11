@@ -34,14 +34,14 @@ const ServiceCardText: React.FC<{ title: string; description: string }> = (
 ) => {
   const { title, description } = props;
   return (
-    <>
+    <Stack>
       <Typography variant="body1" fontWeight="bold" align="left">
         {title}
       </Typography>
       <Typography variant="body2" align="left">
         {description}
       </Typography>
-    </>
+    </Stack>
   );
 };
 
@@ -69,8 +69,10 @@ const ServiceSettingsButton: React.FC<{
   );
 };
 
-const ServiceBannerPrice: React.FC<ServiceCardPropsPrice> = (props) => {
-  const { value, discountValue, unit, amount } = props;
+const ServiceBannerPrice: React.FC<
+  ServiceCardPropsPrice & { size?: 'small' | 'medium' }
+> = (props) => {
+  const { value, discountValue, unit, amount, size = 'medium' } = props;
 
   const valuesStr = useMemo(
     () =>
@@ -93,27 +95,33 @@ const ServiceBannerPrice: React.FC<ServiceCardPropsPrice> = (props) => {
 
   return (
     <Stack direction="row" alignItems="center" spacing={1}>
-      <Chip label={discountValueStr || valuesStr} sx={{ fontWeight: 'bold' }} />
       <Chip
+        size={size}
         label={discountValueStr || valuesStr}
-        variant="outlined"
-        size="small"
-        sx={{
-          position: 'relative',
-          '&:before': {
-            content: '" "',
-            display: 'block',
-            width: '100%',
-            borderTop: '2px solid',
-            borderColor: (theme) => theme.palette.primary.main,
-            height: '12px',
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            transform: 'rotate(-12deg)',
-          },
-        }}
+        sx={{ fontWeight: 'bold' }}
       />
+      {discountValueStr && (
+        <Chip
+          label={valuesStr}
+          variant="outlined"
+          size="small"
+          sx={{
+            position: 'relative',
+            '&:before': {
+              content: '" "',
+              display: 'block',
+              width: '100%',
+              borderTop: '2px solid',
+              borderColor: (theme) => theme.palette.primary.main,
+              height: '12px',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              transform: 'rotate(-12deg)',
+            },
+          }}
+        />
+      )}
     </Stack>
   );
 };
@@ -124,12 +132,7 @@ export const ServiceBannerBottomSection: React.FC<{
 }> = (props) => {
   const { price, isPurchaseButtonVisible } = props;
   return (
-    <Stack
-      p={2}
-      direction="row"
-      justifyContent="space-between"
-      alignItems="center"
-    >
+    <Stack direction="row" justifyContent="space-between" alignItems="center">
       {price ? (
         <ServiceBannerPrice
           value={price.value}
@@ -153,6 +156,43 @@ export const ServiceBannerBottomSection: React.FC<{
         >
           Purchase
         </Button>
+      )}
+    </Stack>
+  );
+};
+
+export const ServiceDefaultBottomSection: React.FC<{
+  price: ServiceCardPropsPrice | null;
+  isPurchaseButtonVisible: boolean;
+}> = (props) => {
+  const { price, isPurchaseButtonVisible } = props;
+  return (
+    <Stack direction="row" justifyContent="space-between" alignItems="center">
+      {price ? (
+        <ServiceBannerPrice
+          size="small"
+          value={price.value}
+          discountValue={price.discountValue}
+          unit={price.unit}
+          amount={price.amount}
+        />
+      ) : (
+        <div />
+      )}
+      {isPurchaseButtonVisible && (
+        <IconButton
+          size="small"
+          sx={{
+            border: '1px solid',
+            borderColor: (theme) => theme.palette.primary.main,
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+        >
+          <PurchaseIcon color="primary" fontSize="small" />
+        </IconButton>
       )}
     </Stack>
   );
@@ -182,25 +222,28 @@ export const ServiceCard: React.FC<ServiceCardProps> = (props) => {
         {variant === 'banner' && (
           <Stack>
             <BannerImage src={imageSrc || ''} alt={title} />
-            <Stack p={2}>
+            <Stack p={2} spacing={1} divider={<Divider />}>
               <ServiceCardText title={title} description={description} />
-            </Stack>
-            {(price || isPurchaseButtonVisible) && (
-              <>
-                <Divider />
+              {(price || isPurchaseButtonVisible) && (
                 <ServiceBannerBottomSection
                   price={price}
                   isPurchaseButtonVisible={isPurchaseButtonVisible}
                 />
-              </>
-            )}
+              )}
+            </Stack>
           </Stack>
         )}
         {variant === 'default' && (
           <Stack direction="row">
             <DefaultImage src={imageSrc || ''} alt={title} />
-            <Stack p={1}>
+            <Stack spacing={1} p={1} divider={<Divider />} flex={1}>
               <ServiceCardText title={title} description={description} />
+              {(price || isPurchaseButtonVisible) && (
+                <ServiceDefaultBottomSection
+                  price={price}
+                  isPurchaseButtonVisible={isPurchaseButtonVisible}
+                />
+              )}
             </Stack>
           </Stack>
         )}

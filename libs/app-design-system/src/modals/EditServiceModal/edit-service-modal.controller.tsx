@@ -9,7 +9,7 @@ import {
 } from '@demo-A/api-types';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
-import { ImageSelector } from '../../molecules';
+import { ImageSelector, ServicePriceInput } from '../../molecules';
 import { Button, Typography, Paper } from '../../atoms';
 import { SwitchField, TextField } from '../../inputs';
 import { EditModalProps } from './edit-service-modal.types';
@@ -107,6 +107,16 @@ export const EditServiceModalController: React.FC<EditModalProps> = (props) => {
             multiline
             minRows={4}
             maxRows={8}
+          />
+        </Stack>
+        <Stack>
+          <ServicePriceInput
+            isEnabled={values.price.enabled}
+            onIsEnabledChange={(value) => setFieldValue('price.enabled', value)}
+            priceFieldProps={register('price.value')}
+            discountPriceFieldProps={register('price.discountValue')}
+            amountFieldProps={register('price.amount')}
+            unitFieldProps={register('price.unit')}
           />
         </Stack>
         <Stack spacing={2}>

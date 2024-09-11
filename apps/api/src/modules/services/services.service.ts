@@ -142,6 +142,8 @@ export class ServicesService {
         }).catch(console.error);
       }
 
+      await this.servicesRepository.deleteServicePriceByServiceId(payload.id);
+
       await this.servicesRepository.updateServiceByServiceId(payload.id, {
         status: payload.status,
         cardVariant: payload.cardVariant,
@@ -155,6 +157,14 @@ export class ServicesService {
               publicUrl: payload.newSupabaseImage.publicUrl,
               path: payload.newSupabaseImage.path,
               fullPath: payload.newSupabaseImage.fullPath,
+            }
+          : null,
+        price: payload.price.enabled
+          ? {
+              value: payload.price.value,
+              discountValue: payload.price.discountValue,
+              amount: payload.price.amount,
+              unit: payload.price.unit,
             }
           : null,
       });

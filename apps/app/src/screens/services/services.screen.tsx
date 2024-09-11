@@ -81,6 +81,21 @@ export const ServicesScreen: React.FC = () => {
               fullPath: supabaseImage.fullPath,
             }
           : null,
+        price: values.price.enabled
+          ? {
+              enabled: true,
+              unit: values.price.unit,
+              value: values.price.value,
+              discountValue: values.price.discountValue,
+              amount: values.price.amount,
+            }
+          : {
+              enabled: false,
+              unit: 'no-unit',
+              value: 0,
+              discountValue: null,
+              amount: null,
+            },
       });
 
       closeEditeServiceModal();
@@ -106,6 +121,21 @@ export const ServicesScreen: React.FC = () => {
         longDescription: service.longDescription,
         isPurchaseButtonVisible: service.isPurchaseButtonVisible,
         newSupabaseImage: null,
+        price: service.price
+          ? {
+              enabled: true,
+              unit: service.price.unit,
+              value: service.price.value,
+              discountValue: service.price.discountValue,
+              amount: service.price.amount,
+            }
+          : {
+              enabled: false,
+              unit: 'no-unit',
+              value: 0,
+              discountValue: null,
+              amount: null,
+            },
       };
       openEditServiceModal({
         initialValues,

@@ -104,7 +104,7 @@ export class ServicesRepository {
       relations: ['supabaseImage'],
     });
     if (!service) throw new Error('Service not found');
-    const { newSupabaseImage, ...rest } = payload;
+    const { newSupabaseImage, price, ...rest } = payload;
 
     await this.servicesRepository.update({ id: service.id }, rest);
 
@@ -117,9 +117,23 @@ export class ServicesRepository {
       serviceSupabaseImage.fullPath = payload.newSupabaseImage.fullPath;
       await this.serviceSupabaseImagesRepository.save(serviceSupabaseImage);
     }
+
+    if (payload.price) {
+      const servicePrice = new ServicePriceEntity();
+      servicePrice.serviceId = service.id;
+      servicePrice.value = payload.price.value;
+      servicePrice.discountValue = payload.price.discountValue;
+      servicePrice.amount = payload.price.amount;
+      servicePrice.unit = payload.price.unit;
+      await this.servicePricesRepository.save(servicePrice);
+    }
   }
 
   async deleteServiceSupabaseImageByServiceId(serviceId: string) {
     await this.serviceSupabaseImagesRepository.delete({ serviceId });
+  }
+
+  async deleteServicePriceByServiceId(serviceId: string) {
+    await this.servicePricesRepository.delete({ serviceId });
   }
 }

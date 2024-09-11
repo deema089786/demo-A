@@ -38,4 +38,10 @@ export interface ServicesRepositoryUpdateServicePayload {
     path: string;
     fullPath: string;
   } | null;
+  price?: {
+    value: number;
+    discountValue: number | null;
+    amount: number | null;
+    unit: ServicePriceUnit;
+  } | null;
 }

@@ -1,6 +1,5 @@
 import React, { ReactNode, useCallback } from 'react';
 import {
-  Box,
   Slide,
   Backdrop,
   Portal,
@@ -66,6 +65,7 @@ export const ModalDrawer: React.FC<ModalDrawerProps> = (props) => {
           unmountOnExit
         >
           <Container
+            maxWidth="sm"
             disableGutters
             sx={{
               overflow: 'auto',

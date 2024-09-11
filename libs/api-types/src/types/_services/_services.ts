@@ -5,7 +5,7 @@ import {
   ServiceSupabaseImage,
   supabaseImagePayloadSchema,
 } from './_service-supabase-image';
-import { ServicePrice } from './_service-price';
+import { ServicePrice, servicePricePayloadSchema } from './_service-price';
 
 export type ServiceCardVariant = 'banner' | 'default';
 export type ServiceStatus = 'active' | 'draft' | 'archived' | 'deleted';
@@ -40,32 +40,7 @@ export const createServicePayloadSchema = z.object({
   isPurchaseButtonVisible: z.boolean(),
   //endregion
 
-  price: z.object({
-    enabled: z.boolean(),
-    unit: z.enum([
-      'no-unit',
-      'item',
-      'butch',
-      'hour',
-      'day',
-      'week',
-      'month',
-      'year',
-    ]),
-    value: z.coerce.number({
-      invalid_type_error: 'Invalid value',
-    }),
-    discountValue: z.coerce
-      .number({ invalid_type_error: 'Invalid value' })
-      .nullable()
-      .default(null),
-    amount: z.coerce
-      .number({ invalid_type_error: 'Invalid value' })
-      .int()
-      .positive()
-      .nullable()
-      .default(null),
-  }),
+  price: servicePricePayloadSchema,
 });
 export type CreateServicePayload = z.infer<typeof createServicePayloadSchema>;
 export type CreateServiceResponse = {
@@ -112,6 +87,7 @@ export const updateServicePayloadSchema = z.object({
   isPurchaseButtonVisible: z.boolean(),
   //endregion
   newSupabaseImage: supabaseImagePayloadSchema.nullable(),
+  price: servicePricePayloadSchema,
 });
 export type UpdateServicePayload = z.infer<typeof updateServicePayloadSchema>;
 export type UpdateServiceResponse = {
