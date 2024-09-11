@@ -10,6 +10,7 @@ export interface ServicesRepositoryCreateServicePayload {
   title: string;
   shortDescription: string;
   longDescription: string;
+  isPurchaseButtonVisible: boolean;
   supabaseImage: {
     id: string;
     publicUrl: string;
@@ -30,6 +31,7 @@ export interface ServicesRepositoryUpdateServicePayload {
   title?: string;
   shortDescription?: string;
   longDescription?: string;
+  isPurchaseButtonVisible?: boolean;
   newSupabaseImage?: {
     id: string;
     publicUrl: string;

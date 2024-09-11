@@ -69,6 +69,7 @@ export class ServicesRepository {
     service.title = payload.title;
     service.shortDescription = payload.shortDescription;
     service.longDescription = payload.longDescription;
+    service.isPurchaseButtonVisible = payload.isPurchaseButtonVisible;
     await this.servicesRepository.save(service);
 
     if (payload.supabaseImage) {

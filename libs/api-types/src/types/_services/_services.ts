@@ -19,6 +19,10 @@ export interface Service extends Timestamp {
   shortDescription: string;
   longDescription: string;
 
+  // region options
+  isPurchaseButtonVisible: boolean;
+  // endregion
+
   supabaseImage: ServiceSupabaseImage | null;
   price: ServicePrice | null;
 }
@@ -31,6 +35,10 @@ export const createServicePayloadSchema = z.object({
   shortDescription: z.string(),
   longDescription: z.string(),
   supabaseImage: supabaseImagePayloadSchema.nullable(),
+
+  //region option
+  isPurchaseButtonVisible: z.boolean(),
+  //endregion
 
   price: z.object({
     enabled: z.boolean(),
@@ -100,6 +108,9 @@ export const updateServicePayloadSchema = z.object({
   title: z.string(),
   shortDescription: z.string(),
   longDescription: z.string(),
+  //region option
+  isPurchaseButtonVisible: z.boolean(),
+  //endregion
   newSupabaseImage: supabaseImagePayloadSchema.nullable(),
 });
 export type UpdateServicePayload = z.infer<typeof updateServicePayloadSchema>;

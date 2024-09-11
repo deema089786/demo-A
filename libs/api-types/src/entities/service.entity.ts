@@ -38,6 +38,11 @@ export class ServiceEntity extends TimestampEntity implements Service {
   @Column({ type: 'varchar' })
   longDescription!: string;
 
+  // region options
+  @Column({ type: 'boolean', default: false })
+  isPurchaseButtonVisible!: boolean;
+  // endregion
+
   @Column({ type: 'varchar', nullable: true })
   imagePath!: string | null;
 

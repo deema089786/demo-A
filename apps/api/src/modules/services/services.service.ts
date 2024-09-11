@@ -38,6 +38,7 @@ export class ServicesService {
         title: payload.title,
         shortDescription: payload.shortDescription,
         longDescription: payload.longDescription,
+        isPurchaseButtonVisible: payload.isPurchaseButtonVisible,
         supabaseImage: payload.supabaseImage
           ? {
               id: payload.supabaseImage.id,
@@ -147,6 +148,7 @@ export class ServicesService {
         title: payload.title,
         shortDescription: payload.shortDescription,
         longDescription: payload.longDescription,
+        isPurchaseButtonVisible: payload.isPurchaseButtonVisible,
         newSupabaseImage: payload.newSupabaseImage
           ? {
               id: payload.newSupabaseImage.id,

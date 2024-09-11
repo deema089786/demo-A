@@ -72,6 +72,7 @@ export const ServicesScreen: React.FC = () => {
         title: values.title,
         shortDescription: values.shortDescription,
         longDescription: values.longDescription,
+        isPurchaseButtonVisible: values.isPurchaseButtonVisible,
         newSupabaseImage: supabaseImage
           ? {
               id: supabaseImage.id,
@@ -103,6 +104,7 @@ export const ServicesScreen: React.FC = () => {
         title: service.title,
         shortDescription: service.shortDescription,
         longDescription: service.longDescription,
+        isPurchaseButtonVisible: service.isPurchaseButtonVisible,
         newSupabaseImage: null,
       };
       openEditServiceModal({
@@ -223,6 +225,7 @@ export const ServicesScreen: React.FC = () => {
         title: values.title,
         shortDescription: values.shortDescription,
         longDescription: values.longDescription,
+        isPurchaseButtonVisible: values.isPurchaseButtonVisible,
         supabaseImage: { id, publicUrl, path, fullPath },
         price: values.price.enabled
           ? {

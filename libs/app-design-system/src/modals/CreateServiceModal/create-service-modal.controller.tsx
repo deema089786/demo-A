@@ -17,7 +17,7 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { ImageSelector, ServicePriceInput } from '../../molecules';
 import { Button, Typography, Paper } from '../../atoms';
-import { TextField } from '../../inputs';
+import { SwitchField, TextField } from '../../inputs';
 import { CreateModalProps } from './create-service-modal.types';
 import { ModalDrawer } from '../components';
 import { getInitialValues } from './create-service-modal.constants';
@@ -137,14 +137,14 @@ export const CreateServiceModalController: React.FC<CreateModalProps> = (
           />
         </Stack>
         <Stack spacing={2}>
-          <FormControlLabel
+          <SwitchField
+            label="Display Purchase Button"
+            {...register('isPurchaseButtonVisible')}
+          />
+          <SwitchField
             label="Save as Draft"
-            control={
-              <Switch
-                checked={isSaveAsDraft}
-                onChange={(e, value) => setIsSaveAsDraft(value)}
-              />
-            }
+            value={isSaveAsDraft}
+            onChangeValue={setIsSaveAsDraft}
           />
           <Button
             variant="contained"

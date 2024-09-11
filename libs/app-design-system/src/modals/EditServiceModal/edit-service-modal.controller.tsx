@@ -11,7 +11,7 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { ImageSelector } from '../../molecules';
 import { Button, Typography, Paper } from '../../atoms';
-import { TextField } from '../../inputs';
+import { SwitchField, TextField } from '../../inputs';
 import { EditModalProps } from './edit-service-modal.types';
 import { ModalDrawer } from '../components';
 
@@ -110,6 +110,10 @@ export const EditServiceModalController: React.FC<EditModalProps> = (props) => {
           />
         </Stack>
         <Stack spacing={2}>
+          <SwitchField
+            label="Display Purchase Button"
+            {...register('isPurchaseButtonVisible')}
+          />
           <Button
             variant="contained"
             type="submit"

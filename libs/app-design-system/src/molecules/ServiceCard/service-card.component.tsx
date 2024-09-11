@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import ActionsIcon from '@mui/icons-material/Settings';
+import PurchaseIcon from '@mui/icons-material/ShoppingBag';
 import { styled } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
 import { ServiceStatus } from '@demo-A/app-modules';
+import { Divider } from '@mui/material';
+import Chip from '@mui/material/Chip';
 
-import { ServiceCardProps } from './service-card.types';
-import { Paper, PaperButton, StatusLogo, Typography } from '../../atoms';
+import { ServiceCardProps, ServiceCardPropsPrice } from './service-card.types';
+import {
+  Button,
+  Paper,
+  PaperButton,
+  StatusLogo,
+  Typography,
+} from '../../atoms';
 
 const BannerImage = styled('img')({
   height: '100px',
@@ -60,6 +69,95 @@ const ServiceSettingsButton: React.FC<{
   );
 };
 
+const ServiceBannerPrice: React.FC<ServiceCardPropsPrice> = (props) => {
+  const { value, discountValue, unit, amount } = props;
+
+  const valuesStr = useMemo(
+    () =>
+      new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      }).format(value),
+    [value],
+  );
+  const discountValueStr = useMemo(
+    () =>
+      discountValue
+        ? new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+          }).format(discountValue)
+        : null,
+    [discountValue],
+  );
+
+  return (
+    <Stack direction="row" alignItems="center" spacing={1}>
+      <Chip label={discountValueStr || valuesStr} sx={{ fontWeight: 'bold' }} />
+      <Chip
+        label={discountValueStr || valuesStr}
+        variant="outlined"
+        size="small"
+        sx={{
+          position: 'relative',
+          '&:before': {
+            content: '" "',
+            display: 'block',
+            width: '100%',
+            borderTop: '2px solid',
+            borderColor: (theme) => theme.palette.primary.main,
+            height: '12px',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            transform: 'rotate(-12deg)',
+          },
+        }}
+      />
+    </Stack>
+  );
+};
+
+export const ServiceBannerBottomSection: React.FC<{
+  price: ServiceCardPropsPrice | null;
+  isPurchaseButtonVisible: boolean;
+}> = (props) => {
+  const { price, isPurchaseButtonVisible } = props;
+  return (
+    <Stack
+      p={2}
+      direction="row"
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      {price ? (
+        <ServiceBannerPrice
+          value={price.value}
+          discountValue={price.discountValue}
+          unit={price.unit}
+          amount={price.amount}
+        />
+      ) : (
+        <div />
+      )}
+      {isPurchaseButtonVisible && (
+        <Button
+          size="small"
+          variant="contained"
+          color="primary"
+          startIcon={<PurchaseIcon />}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+        >
+          Purchase
+        </Button>
+      )}
+    </Stack>
+  );
+};
+
 export const ServiceCard: React.FC<ServiceCardProps> = (props) => {
   const {
     variant,
@@ -70,6 +168,8 @@ export const ServiceCard: React.FC<ServiceCardProps> = (props) => {
     status,
     isActionsAvailable,
     onActionsClick,
+    isPurchaseButtonVisible,
+    price,
   } = props;
 
   return (
@@ -80,12 +180,21 @@ export const ServiceCard: React.FC<ServiceCardProps> = (props) => {
         sx={{ textDecoration: 'none', color: 'inherit', position: 'relative' }}
       >
         {variant === 'banner' && (
-          <>
+          <Stack>
             <BannerImage src={imageSrc || ''} alt={title} />
             <Stack p={2}>
               <ServiceCardText title={title} description={description} />
             </Stack>
-          </>
+            {(price || isPurchaseButtonVisible) && (
+              <>
+                <Divider />
+                <ServiceBannerBottomSection
+                  price={price}
+                  isPurchaseButtonVisible={isPurchaseButtonVisible}
+                />
+              </>
+            )}
+          </Stack>
         )}
         {variant === 'default' && (
           <Stack direction="row">

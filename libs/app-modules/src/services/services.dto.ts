@@ -18,5 +18,14 @@ export const mapApiServiceToService = (service: APIService): Service => {
     longDescription: service.longDescription,
     imageSrc: service.supabaseImage ? service.supabaseImage.publicUrl : null,
     inAppPath: `/services/${service.id}`,
+    isPurchaseButtonVisible: service.isPurchaseButtonVisible,
+    price: service.price
+      ? {
+          value: service.price.value,
+          discountValue: service.price.discountValue,
+          unit: service.price.unit,
+          amount: service.price.amount,
+        }
+      : null,
   };
 };

@@ -34,8 +34,19 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
             href={service.inAppPath}
             status={service.status}
             isActionsAvailable={isServiceSettingsAvailable}
+            isPurchaseButtonVisible={service.isPurchaseButtonVisible}
             onActionsClick={() =>
               onServiceSettingsClick({ serviceId: service.id })
+            }
+            price={
+              service.price
+                ? {
+                    value: service.price.value,
+                    discountValue: service.price.discountValue,
+                    unit: service.price.unit,
+                    amount: service.price.amount,
+                  }
+                : null
             }
           />
         )),
@@ -56,8 +67,19 @@ export const ServicesPage: React.FC<ServicesPageProps> = (props) => {
             href={service.inAppPath}
             status={service.status}
             isActionsAvailable={isServiceSettingsAvailable}
+            isPurchaseButtonVisible={service.isPurchaseButtonVisible}
             onActionsClick={() =>
               onServiceSettingsClick({ serviceId: service.id })
+            }
+            price={
+              service.price
+                ? {
+                    value: service.price.value,
+                    discountValue: service.price.discountValue,
+                    unit: service.price.unit,
+                    amount: service.price.amount,
+                  }
+                : null
             }
           />
         )),
