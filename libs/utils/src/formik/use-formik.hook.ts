@@ -5,6 +5,16 @@ import {
   FormikErrors,
 } from 'formik';
 import { useCallback, useMemo } from 'react';
+import { get as _get } from 'lodash';
+
+// Utility type to get nested paths, handling optional objects and objects that can be undefined
+type NestedPaths<T> = T extends object
+  ? {
+      [K in keyof T]-?: T[K] extends object | undefined
+        ? `${K & string}` | `${K & string}.${NestedPaths<NonNullable<T[K]>>}`
+        : `${K & string}`;
+    }[keyof T]
+  : never;
 
 export const useFormik = <Values extends FormikValues = FormikValues>(
   params: FormikConfig<Values>,
@@ -17,12 +27,12 @@ export const useFormik = <Values extends FormikValues = FormikValues>(
   );
 
   const register = useCallback(
-    (fieldKey: keyof Values) => ({
+    (fieldKey: NestedPaths<Values>) => ({
       name: fieldKey,
-      value: hook.values[fieldKey],
+      value: _get(hook.values, fieldKey),
       onChange: hook.handleChange,
       onBlur: hook.handleBlur,
-      errorMessage: errors[fieldKey],
+      errorMessage: _get(errors, fieldKey),
     }),
     [errors, hook.handleChange, hook.handleBlur, hook.values],
   );

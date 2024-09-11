@@ -1,10 +1,12 @@
 import { TextFieldProps as TextFieldPropsMUI } from '@mui/material/TextField';
+import React from 'react';
 
 export type TextFieldProps = {
   value?: TextFieldPropsMUI['value'];
   onChange?: TextFieldPropsMUI['onChange'];
   onBlur?: TextFieldPropsMUI['onBlur'];
-  errorMessage?: string;
+  errorMessage?: string | unknown;
+  helperText?: string;
   name?: string;
   id?: string;
   label?: string;
@@ -14,4 +16,7 @@ export type TextFieldProps = {
   multiline?: TextFieldPropsMUI['multiline'];
   minRows?: TextFieldPropsMUI['minRows'];
   maxRows?: TextFieldPropsMUI['maxRows'];
+  size?: TextFieldPropsMUI['size'];
+  startAdornment?: React.ReactNode;
+  endAdornment?: React.ReactNode;
 };

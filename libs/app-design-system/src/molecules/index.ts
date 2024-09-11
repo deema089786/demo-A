@@ -4,3 +4,4 @@ export * from './ServiceCard';
 export * from './NoServicesCard';
 export * from './LogoutCard';
 export * from './ImageSelector';
+export * from './ServicePriceInput';

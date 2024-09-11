@@ -1,4 +1,4 @@
 export * from './base';
 export * from './users';
 export * from './auth';
-export * from './test-services';
+export * from './_services';

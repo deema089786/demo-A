@@ -4,6 +4,7 @@ import {
   Service,
   ServiceEntity,
   ServiceSupabaseImageEntity,
+  ServicePriceEntity,
 } from '@demo-A/api-types';
 import { Repository } from 'typeorm';
 import { FindOneOptions } from 'typeorm/find-options/FindOneOptions';
@@ -20,6 +21,8 @@ export class ServicesRepository {
     private servicesRepository: Repository<ServiceEntity>,
     @InjectRepository(ServiceSupabaseImageEntity)
     private serviceSupabaseImagesRepository: Repository<ServiceSupabaseImageEntity>,
+    @InjectRepository(ServicePriceEntity)
+    private servicePricesRepository: Repository<ServicePriceEntity>,
   ) {}
 
   async getServiceById(
@@ -35,7 +38,7 @@ export class ServicesRepository {
   }
 
   async getServiceBy(
-    where: FindOneOptions<Service>['where'],
+    where: Omit<FindOneOptions<Service>['where'], 'price'>,
     options: { relations?: FindOneOptions<Service>['relations'] } = {},
   ): Promise<Service | null> {
     const service = await this.servicesRepository.findOne({
@@ -47,7 +50,7 @@ export class ServicesRepository {
   }
 
   async getServices(
-    where: FindOneOptions<Service>['where'],
+    where: Omit<FindOneOptions<Service>['where'], 'price'>,
     options: { relations?: FindOneOptions<Service>['relations'] } = {},
   ): Promise<Service[]> {
     const services = await this.servicesRepository.find({
@@ -76,6 +79,16 @@ export class ServicesRepository {
       serviceSupabaseImage.path = payload.supabaseImage.path;
       serviceSupabaseImage.fullPath = payload.supabaseImage.fullPath;
       await this.serviceSupabaseImagesRepository.save(serviceSupabaseImage);
+    }
+
+    if (payload.price) {
+      const servicePrice = new ServicePriceEntity();
+      servicePrice.serviceId = service.id;
+      servicePrice.value = payload.price.value;
+      servicePrice.discountValue = payload.price.discountValue;
+      servicePrice.amount = payload.price.amount;
+      servicePrice.unit = payload.price.unit;
+      await this.servicePricesRepository.save(servicePrice);
     }
 
     return service;

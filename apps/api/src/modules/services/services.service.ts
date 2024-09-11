@@ -16,7 +16,6 @@ import {
 import { ClsService } from 'nestjs-cls';
 import { In } from 'typeorm';
 import { ConfigService } from '@demo-A/nest-modules';
-import { createClient } from '@supabase/supabase-js';
 import { deleteFileFromStorage } from '@demo-A/utils';
 
 import { Config } from '../../config';
@@ -47,6 +46,14 @@ export class ServicesService {
               fullPath: payload.supabaseImage.fullPath,
             }
           : null,
+        price: payload.price.enabled
+          ? {
+              value: payload.price.value,
+              discountValue: payload.price.discountValue,
+              amount: payload.price.amount,
+              unit: payload.price.unit,
+            }
+          : null,
       });
       return { success: true, service };
     } catch (e) {
@@ -65,7 +72,7 @@ export class ServicesService {
 
     const services = await this.servicesRepository.getServices(
       { status: In(statusIncludes) },
-      { relations: ['supabaseImage'] },
+      { relations: ['supabaseImage', 'price'] },
     );
     return { services };
   }
@@ -75,7 +82,7 @@ export class ServicesService {
   }): Promise<GetServiceResponse> {
     const service = await this.servicesRepository.getServiceById(
       params.serviceId,
-      { relations: ['supabaseImage'] },
+      { relations: ['supabaseImage', 'price'] },
     );
     return { service };
   }
@@ -98,7 +105,7 @@ export class ServicesService {
     const service = await this.servicesRepository.getServiceById(
       params.serviceId,
       {
-        relations: ['supabaseImage'],
+        relations: ['supabaseImage', 'price'],
       },
     );
     if (!service) throw new Error('Service not found');
@@ -118,7 +125,7 @@ export class ServicesService {
   ): Promise<UpdateServiceResponse> {
     try {
       const service = await this.servicesRepository.getServiceById(payload.id, {
-        relations: ['supabaseImage'],
+        relations: ['supabaseImage', 'price'],
       });
       if (!service) throw new Error('Service not found');
 
@@ -151,7 +158,7 @@ export class ServicesService {
       });
       const updateService = await this.servicesRepository.getServiceById(
         payload.id,
-        { relations: ['supabaseImage'] },
+        { relations: ['supabaseImage', 'price'] },
       );
       return { success: true, service: updateService };
     } catch (e) {

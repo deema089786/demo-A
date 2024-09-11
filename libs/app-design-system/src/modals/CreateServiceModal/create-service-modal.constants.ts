@@ -9,4 +9,11 @@ export const getInitialValues = (params: {
   shortDescription: '',
   longDescription: '',
   supabaseImage: null,
+  price: {
+    enabled: false,
+    unit: 'no-unit',
+    value: 0,
+    discountValue: null,
+    amount: null,
+  },
 });

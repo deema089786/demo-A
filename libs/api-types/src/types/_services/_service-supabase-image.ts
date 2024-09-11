@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 import { Timestamp } from '../base';
-import { Service } from './test-services';
+import { Service } from './_services';
 
-export interface TestServiceSupabaseImage extends Timestamp {
+export interface ServiceSupabaseImage extends Timestamp {
   id: string;
   serviceId: string;
   supabaseId: string;

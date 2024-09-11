@@ -2,12 +2,13 @@ import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import {
   Service,
   ServiceCardVariant,
-  TestServiceSupabaseImage,
+  ServiceSupabaseImage,
   ServiceSupabaseImageEntity,
   ServiceStatus,
 } from '@demo-A/api-types';
 
 import { TimestampEntity } from './base/timestamp.entity';
+import { ServicePriceEntity } from './service-price.entity';
 
 @Entity()
 export class ServiceEntity extends TimestampEntity implements Service {
@@ -47,5 +48,11 @@ export class ServiceEntity extends TimestampEntity implements Service {
     () => ServiceSupabaseImageEntity,
     (serviceSupabaseImageEntity) => serviceSupabaseImageEntity.service,
   )
-  supabaseImage!: TestServiceSupabaseImage | null;
+  supabaseImage!: ServiceSupabaseImage | null;
+
+  @OneToOne(
+    () => ServicePriceEntity,
+    (servicePriceEntity) => servicePriceEntity.service,
+  )
+  price!: ServicePriceEntity | null;
 }

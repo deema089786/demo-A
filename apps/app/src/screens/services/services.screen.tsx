@@ -224,6 +224,21 @@ export const ServicesScreen: React.FC = () => {
         shortDescription: values.shortDescription,
         longDescription: values.longDescription,
         supabaseImage: { id, publicUrl, path, fullPath },
+        price: values.price.enabled
+          ? {
+              enabled: true,
+              unit: values.price.unit,
+              value: values.price.value,
+              discountValue: values.price.discountValue,
+              amount: values.price.amount,
+            }
+          : {
+              enabled: false,
+              unit: 'no-unit',
+              value: 0,
+              discountValue: null,
+              amount: null,
+            },
       });
 
       closeCreateServiceModal();

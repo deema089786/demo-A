@@ -7,7 +7,13 @@ const defaultThemeOptions: ThemeOptions = {
     borderRadius: 16,
   },
   components: {
-    // TODO make input round the same as button
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiFormHelperText-root': { marginTop: 0 },
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {

@@ -1,4 +1,8 @@
-import { ServiceCardVariant, ServiceStatus } from '@demo-A/api-types';
+import {
+  ServiceCardVariant,
+  ServicePriceUnit,
+  ServiceStatus,
+} from '@demo-A/api-types';
 
 export interface ServicesRepositoryCreateServicePayload {
   status: ServiceStatus;
@@ -11,6 +15,12 @@ export interface ServicesRepositoryCreateServicePayload {
     publicUrl: string;
     path: string;
     fullPath: string;
+  } | null;
+  price: {
+    value: number;
+    discountValue: number | null;
+    amount: number | null;
+    unit: ServicePriceUnit;
   } | null;
 }
 

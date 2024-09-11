@@ -52,7 +52,7 @@ export const EditServiceModalController: React.FC<EditModalProps> = (props) => {
     <ModalDrawer open={visible} onClose={onCancel} onExited={handleExited}>
       <Stack spacing={3} p={2} pb={5} component="form" onSubmit={handleSubmit}>
         <Typography variant="h6" component="h1">
-          Creating a service card
+          Editing a service card
         </Typography>
         <Stack spacing={1}>
           <ToggleButtonGroup

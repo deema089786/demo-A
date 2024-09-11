@@ -14,10 +14,14 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
     placeholder,
     variant,
     errorMessage,
+    helperText,
     type,
     multiline,
     maxRows,
     minRows,
+    size,
+    startAdornment,
+    endAdornment,
   } = props;
 
   return (
@@ -31,11 +35,15 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
       onBlur={onBlur}
       placeholder={placeholder}
       error={Boolean(errorMessage)}
-      helperText={errorMessage}
+      helperText={errorMessage || helperText}
       type={type}
       multiline={multiline}
       maxRows={maxRows}
       minRows={minRows}
+      size={size}
+      slotProps={{
+        input: { startAdornment, endAdornment },
+      }}
     />
   );
 };

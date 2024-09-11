@@ -1,10 +1,11 @@
-import { z } from 'zod';
+import { boolean, z } from 'zod';
 
 import { Timestamp } from '../base';
 import {
-  TestServiceSupabaseImage,
+  ServiceSupabaseImage,
   supabaseImagePayloadSchema,
-} from './test-service-supabase-image';
+} from './_service-supabase-image';
+import { ServicePrice } from './_service-price';
 
 export type ServiceCardVariant = 'banner' | 'default';
 export type ServiceStatus = 'active' | 'draft' | 'archived' | 'deleted';
@@ -18,7 +19,8 @@ export interface Service extends Timestamp {
   shortDescription: string;
   longDescription: string;
 
-  supabaseImage: TestServiceSupabaseImage | null;
+  supabaseImage: ServiceSupabaseImage | null;
+  price: ServicePrice | null;
 }
 
 // region Create Service
@@ -29,6 +31,33 @@ export const createServicePayloadSchema = z.object({
   shortDescription: z.string(),
   longDescription: z.string(),
   supabaseImage: supabaseImagePayloadSchema.nullable(),
+
+  price: z.object({
+    enabled: z.boolean(),
+    unit: z.enum([
+      'no-unit',
+      'item',
+      'butch',
+      'hour',
+      'day',
+      'week',
+      'month',
+      'year',
+    ]),
+    value: z.coerce.number({
+      invalid_type_error: 'Invalid value',
+    }),
+    discountValue: z.coerce
+      .number({ invalid_type_error: 'Invalid value' })
+      .nullable()
+      .default(null),
+    amount: z.coerce
+      .number({ invalid_type_error: 'Invalid value' })
+      .int()
+      .positive()
+      .nullable()
+      .default(null),
+  }),
 });
 export type CreateServicePayload = z.infer<typeof createServicePayloadSchema>;
 export type CreateServiceResponse = {
