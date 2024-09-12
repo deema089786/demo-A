@@ -53,7 +53,7 @@ You can see an example of a full-stack application that can be used in various w
   <img src="readme-assets/screenshots/screenshot-2.PNG" width="250" />
   <img src="readme-assets/screenshots/screenshot-5.PNG" width="250" />
   <img src="readme-assets/screenshots/screenshot-6.PNG" width="250" />
-  <img src="readme-assets/screenshots/screenshot-8.PNG" width="250" />
   <img src="readme-assets/screenshots/screenshot-9.PNG" width="250" />
+  <img src="readme-assets/screenshots/screenshot-8.PNG" width="250" />
   <img src="readme-assets/screenshots/screenshot-7.PNG" width="250" />
 </div>
