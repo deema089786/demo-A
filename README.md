@@ -47,30 +47,34 @@ You can see an example of a full-stack application that can be used in various w
 
 ## List of all screenshots
 
-[//]: # (<div style="display: grid; grid-template-columns: repeat&#40;3, 1fr&#41;; gap: 20px;">)
+<p class="mdx-images-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
 
-[//]: # (  <img src="readme-assets/screenshots/screenshot-1.PNG" width="250" />)
+  <img src="readme-assets/screenshots/screenshot-1.PNG" width="250" />
 
-[//]: # (  <img src="readme-assets/screenshots/screenshot-3.jpeg" width="250" />)
+  <img src="readme-assets/screenshots/screenshot-3.jpeg" width="250" />
 
-[//]: # (  <img src="readme-assets/screenshots/screenshot-4.PNG" width="250" />)
+  <img src="readme-assets/screenshots/screenshot-4.PNG" width="250" />
 
-[//]: # (  <img src="readme-assets/screenshots/screenshot-2.PNG" width="250" />)
+  <img src="readme-assets/screenshots/screenshot-2.PNG" width="250" />
 
-[//]: # (  <img src="readme-assets/screenshots/screenshot-5.PNG" width="250" />)
+  <img src="readme-assets/screenshots/screenshot-5.PNG" width="250" />
 
-[//]: # (  <img src="readme-assets/screenshots/screenshot-6.PNG" width="250" />)
+  <img src="readme-assets/screenshots/screenshot-6.PNG" width="250" />
 
-[//]: # (  <img src="readme-assets/screenshots/screenshot-9.PNG" width="250" />)
+  <img src="readme-assets/screenshots/screenshot-9.PNG" width="250" />
 
-[//]: # (  <img src="readme-assets/screenshots/screenshot-8.PNG" width="250" />)
+  <img src="readme-assets/screenshots/screenshot-8.PNG" width="250" />
 
-[//]: # (  <img src="readme-assets/screenshots/screenshot-7.PNG" width="250" />)
+  <img src="readme-assets/screenshots/screenshot-7.PNG" width="250" />
 
-[//]: # (</div>)
+</p>
 
-|                                                                         |                                                                       |                                                                      |
-|:-----------------------------------------------------------------------:|:---------------------------------------------------------------------:|:--------------------------------------------------------------------:|
-| <img width="250" src="readme-assets/screenshots/screenshot-1.PNG"/>     | <img src="readme-assets/screenshots/screenshot-3.jpeg" width="250" /> | <img src="readme-assets/screenshots/screenshot-4.PNG" width="250" /> |
-|  <img src="readme-assets/screenshots/screenshot-2.PNG" width="250" />   | <img src="readme-assets/screenshots/screenshot-5.PNG" width="250" />  | <img src="readme-assets/screenshots/screenshot-6.PNG" width="250" /> |
-|  <img src="readme-assets/screenshots/screenshot-9.PNG" width="250" />   | <img src="readme-assets/screenshots/screenshot-8.PNG" width="250" />  | <img src="readme-assets/screenshots/screenshot-7.PNG" width="250" /> |
+[//]: # (|                                                                         |                                                                       |                                                                      |)
+
+[//]: # (|:-----------------------------------------------------------------------:|:---------------------------------------------------------------------:|:--------------------------------------------------------------------:|)
+
+[//]: # (| <img width="250" src="readme-assets/screenshots/screenshot-1.PNG"/>     | <img src="readme-assets/screenshots/screenshot-3.jpeg" width="250" /> | <img src="readme-assets/screenshots/screenshot-4.PNG" width="250" /> |)
+
+[//]: # (|  <img src="readme-assets/screenshots/screenshot-2.PNG" width="250" />   | <img src="readme-assets/screenshots/screenshot-5.PNG" width="250" />  | <img src="readme-assets/screenshots/screenshot-6.PNG" width="250" /> |)
+
+[//]: # (|  <img src="readme-assets/screenshots/screenshot-9.PNG" width="250" />   | <img src="readme-assets/screenshots/screenshot-8.PNG" width="250" />  | <img src="readme-assets/screenshots/screenshot-7.PNG" width="250" /> |)
